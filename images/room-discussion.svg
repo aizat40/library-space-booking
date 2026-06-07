@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-labelledby="title desc">
+  <title id="title">Discussion room</title>
+  <desc id="desc">A placeholder illustration of a discussion room with table, screen, and chairs.</desc>
+  <rect width="640" height="420" fill="#f4faf9"/>
+  <rect x="55" y="55" width="530" height="305" rx="8" fill="#ffffff" stroke="#c8d3dc" stroke-width="4"/>
+  <rect x="105" y="90" width="210" height="110" rx="8" fill="#dff3f2"/>
+  <rect x="350" y="96" width="120" height="76" rx="6" fill="#10212b"/>
+  <rect x="370" y="116" width="80" height="36" rx="4" fill="#1f9bb4"/>
+  <ellipse cx="300" cy="270" rx="150" ry="46" fill="#0e7c7b"/>
+  <rect x="230" y="250" width="140" height="75" rx="8" fill="#116f6e"/>
+  <circle cx="175" cy="245" r="28" fill="#f0b429"/>
+  <circle cx="455" cy="245" r="28" fill="#e76f51"/>
+  <circle cx="250" cy="205" r="28" fill="#2f9e44"/>
+  <circle cx="370" cy="205" r="28" fill="#1f9bb4"/>
+</svg>

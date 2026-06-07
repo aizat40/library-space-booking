@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Space Booking System | Booking Management</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/auth.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <nav class="nav-shell" aria-label="Primary navigation">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">LB</span><span><strong>Library Booking</strong><small>Tunku Tun Aminah Library</small></span></a>
+      <div class="nav-links">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="availability.html">Availability</a>
+        <a class="nav-link" href="booking.html">Book a Space</a>
+        <a class="nav-link active" href="dashboard.html">Dashboard</a>
+        <a class="nav-link" href="help.html">Help</a>
+      </div>
+      <div class="nav-actions"><a class="button small ghost" href="login.html">Login</a><a class="button small admin-link" href="admin-login.html">Admin</a></div>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="page-title"><div class="section"><p class="eyebrow">Booking Management</p><h1>Edit or cancel reservations</h1><p>Users can manage existing reservations from the dashboard without returning to manual counter arrangements.</p></div></section>
+    <section class="section">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Reservation</th><th>Room</th><th>Date and time</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td>LB-204-0626</td><td>Discussion Room A-204</td><td>10 June 2026, 10:00 AM</td><td><span class="status confirmed">Confirmed</span></td><td><a class="button small" href="edit-booking.html">Edit</a> <a class="button small warning" href="cancel-booking.html">Cancel</a></td></tr>
+            <tr><td>LB-112-0626</td><td>Learning Space B-112</td><td>12 June 2026, 2:00 PM</td><td><span class="status pending">Pending</span></td><td><a class="button small" href="edit-booking.html">Edit</a> <a class="button small warning" href="cancel-booking.html">Cancel</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="footer-shell"><span>Booking management supports edit and cancel flows.</span><a href="dashboard.html">Back to dashboard</a></div></footer>
+  <script src="js/script.js" defer></script>
+</body>
+</html>
+
+
+

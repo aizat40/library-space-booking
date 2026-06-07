@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Space Booking System | Edit Booking</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/auth.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <nav class="nav-shell" aria-label="Primary navigation">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">LB</span><span><strong>Library Booking</strong><small>Tunku Tun Aminah Library</small></span></a>
+      <div class="nav-links">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="availability.html">Availability</a>
+        <a class="nav-link" href="booking.html">Book a Space</a>
+        <a class="nav-link active" href="dashboard.html">Dashboard</a>
+        <a class="nav-link" href="help.html">Help</a>
+      </div>
+      <div class="nav-actions"><a class="button small ghost" href="login.html">Login</a><a class="button small admin-link" href="admin-login.html">Admin</a></div>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="page-title"><div class="section"><p class="eyebrow">Edit Booking</p><h1>Update reservation LB-204-0626</h1><p>Change room, date, time, or participants while keeping the reservation record easy to review.</p></div></section>
+    <section class="section grid two">
+      <article class="form-panel">
+        <h2>Updated details</h2>
+        <form action="confirmation.html" method="get">
+          <label for="edit-room">Room
+            <select id="edit-room" name="edit-room"><option>Discussion Room A-204</option><option>Learning Space B-112</option><option>Room D-018</option></select>
+          </label>
+          <div class="form-grid">
+            <label for="edit-date">Date
+              <input id="edit-date" name="edit-date" type="date">
+            </label>
+            <label for="edit-participants">Participants
+              <input id="edit-participants" name="edit-participants" type="number" value="4" min="1" max="12">
+            </label>
+          </div>
+          <div class="form-grid">
+            <label for="edit-start">Start time
+              <input id="edit-start" name="edit-start" type="time">
+            </label>
+            <label for="edit-end">End time
+              <input id="edit-end" name="edit-end" type="time">
+            </label>
+          </div>
+          <button class="button" type="submit">Save Changes</button>
+        </form>
+      </article>
+      <aside class="alert pending">
+        <span class="status pending">Review required</span>
+        <h2>Availability check</h2>
+        <p>Changing a confirmed slot may return the booking to pending status until room availability is reviewed.</p>
+        <a class="button secondary" href="manage-bookings.html">Back to Management</a>
+      </aside>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="footer-shell"><span>Edit booking flow for reservation changes.</span><a href="cancel-booking.html">Cancel instead</a></div></footer>
+  <script src="js/script.js" defer></script>
+</body>
+</html>
+
+
+

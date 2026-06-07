@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Space Booking System | Room Details</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/auth.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <nav class="nav-shell" aria-label="Primary navigation">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">LB</span><span><strong>Library Booking</strong><small>Tunku Tun Aminah Library</small></span></a>
+      <div class="nav-links">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link active" href="availability.html">Availability</a>
+        <a class="nav-link" href="booking.html">Book a Space</a>
+        <a class="nav-link" href="dashboard.html">Dashboard</a>
+        <a class="nav-link" href="help.html">Help</a>
+      </div>
+      <div class="nav-actions"><a class="button small ghost" href="login.html">Login</a><a class="button small admin-link" href="admin-login.html">Admin</a></div>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="page-title">
+      <div class="section">
+        <p class="eyebrow">Room Details</p>
+        <h1>Discussion Room A-204</h1>
+        <p>Review room facilities, capacity, location, and upcoming reservation slots before creating a booking.</p>
+      </div>
+    </section>
+    <section class="section grid two">
+      <article class="panel">
+        <img src="images/room-discussion.svg" alt="Discussion room preview with table and display">
+      </article>
+      <article class="panel">
+        <span class="status available">Available</span>
+        <h2>Room information</h2>
+        <ul class="detail-list">
+          <li><span>Zone</span><strong>Discussion Zone A</strong></li>
+          <li><span>Capacity</span><strong>8 users</strong></li>
+          <li><span>Equipment</span><strong>Display, whiteboard, power outlets</strong></li>
+          <li><span>Recommended use</span><strong>Group discussion and presentation practice</strong></li>
+        </ul>
+        <div class="actions"><a class="button" href="booking.html">Book This Room</a><a class="button secondary" href="availability.html">Back to Availability</a></div>
+      </article>
+    </section>
+    <section class="section grid two compact">
+      <article class="table-wrap" aria-label="Available time slots">
+        <table>
+          <caption class="helper-text">Upcoming slots for Discussion Room A-204</caption>
+          <thead><tr><th>Date</th><th>Time</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td>10 June 2026</td><td>10:00 AM - 12:00 PM</td><td><span class="status available">Available</span></td><td><a class="button small" href="booking.html">Book</a></td></tr>
+            <tr><td>10 June 2026</td><td>1:00 PM - 3:00 PM</td><td><span class="status pending">Pending</span></td><td><a class="button small secondary" href="booking.html">Request</a></td></tr>
+            <tr><td>10 June 2026</td><td>3:30 PM - 5:30 PM</td><td><span class="status conflict">Conflict</span></td><td><a class="button small ghost" href="availability.html">Find Other</a></td></tr>
+          </tbody>
+        </table>
+      </article>
+      <article class="panel">
+        <h2>Booking rules</h2>
+        <ul class="steps">
+          <li>Use a valid UTHM identity before submitting a room request.</li>
+          <li>Arrive at the service desk before the reservation start time.</li>
+          <li>Cancel or edit reservations from the dashboard when plans change.</li>
+          <li>Follow library conduct rules inside all discussion spaces.</li>
+        </ul>
+      </article>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="footer-shell"><span>Room details connect availability with the booking form.</span><a href="booking.html">Continue booking</a></div></footer>
+  <script src="js/script.js" defer></script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Space Booking System | Login</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/auth.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <nav class="nav-shell" aria-label="Primary navigation">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">LB</span><span><strong>Library Booking</strong><small>Tunku Tun Aminah Library</small></span></a>
+      <div class="nav-links">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="availability.html">Availability</a>
+        <a class="nav-link" href="booking.html">Book a Space</a>
+        <a class="nav-link" href="dashboard.html">Dashboard</a>
+        <a class="nav-link" href="help.html">Help</a>
+      </div>
+      <div class="nav-actions">
+        <a class="button small ghost" href="login.html">Login</a>
+        <a class="button small admin-link" href="admin-login.html">Admin</a>
+      </div>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="page-title">
+      <div class="section">
+        <p class="eyebrow">Secure Access</p>
+        <h1>Login or register</h1>
+        <p>Students can sign in or create an account. Administrators use the separate administrator login.</p>
+      </div>
+    </section>
+    <section class="section grid two">
+      <article class="form-panel">
+        <h2>Login</h2>
+        <form action="dashboard.html" method="get">
+          <label for="login-id">Matric or staff ID
+            <input id="login-id" name="login-id" type="text" placeholder="CI250058" required>
+          </label>
+          <label for="login-password">Password
+            <input id="login-password" name="login-password" type="password" required>
+          </label>
+          <button class="button" type="submit">Login</button>
+          <p class="helper-text">Demo student: CI250058 / student123</p>
+          <a class="button secondary" href="admin-login.html">Administrator Login</a>
+        </form>
+      </article>
+      <article id="register" class="form-panel">
+        <h2>Register</h2>
+        <form action="dashboard.html" method="get">
+          <div class="form-grid">
+            <label for="full-name">Full name
+              <input id="full-name" name="full-name" type="text" required>
+            </label>
+            <label for="matric">Matric number
+              <input id="matric" name="matric" type="text" required>
+            </label>
+          </div>
+          <label for="email">UTHM email
+            <input id="email" name="email" type="email" placeholder="name@siswa.uthm.edu.my" required>
+          </label>
+          <div class="form-grid">
+            <label for="new-password">Password
+              <input id="new-password" name="new-password" type="password" required>
+            </label>
+            <label for="confirm-password">Confirm password
+              <input id="confirm-password" name="confirm-password" type="password" required>
+            </label>
+          </div>
+          <button class="button secondary" type="submit">Create Account</button>
+        </form>
+      </article>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="footer-shell"><span>Secure login and registration for students.</span><a href="index.html">Return home</a></div></footer>
+  <script src="js/script.js" defer></script>
+</body>
+</html>
+
+
+

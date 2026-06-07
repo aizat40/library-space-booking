@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Space Booking System | Room Availability</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/auth.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <nav class="nav-shell" aria-label="Primary navigation">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">LB</span><span><strong>Library Booking</strong><small>Tunku Tun Aminah Library</small></span></a>
+      <div class="nav-links">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link active" href="availability.html">Availability</a>
+        <a class="nav-link" href="booking.html">Book a Space</a>
+        <a class="nav-link" href="dashboard.html">Dashboard</a>
+        <a class="nav-link" href="help.html">Help</a>
+      </div>
+      <div class="nav-actions"><a class="button small ghost" href="login.html">Login</a><a class="button small admin-link" href="admin-login.html">Admin</a></div>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="page-title">
+      <div class="section">
+        <p class="eyebrow">Room Availability</p>
+        <h1>Find an open study space</h1>
+        <p>Use the floor-plan view and room cards to identify available discussion zones, pending slots, and conflict areas before booking.</p>
+      </div>
+    </section>
+    <section class="section floor-layout">
+      <article class="panel floor-map">
+        <h2>Library floor plan</h2>
+        <img src="images/floor-plan.svg" alt="Floor plan showing available, pending, and conflict room areas">
+        <div class="legend">
+          <span><i class="dot green"></i>Available</span>
+          <span><i class="dot yellow"></i>Pending</span>
+          <span><i class="dot red"></i>Conflict</span>
+        </div>
+      </article>
+      <aside class="form-panel">
+        <h2>Search spaces</h2>
+        <form action="availability.html" method="get">
+          <label for="date">Date
+            <input id="date" name="date" type="date">
+          </label>
+          <div class="form-grid">
+            <label for="start">Start
+              <input id="start" name="start" type="time">
+            </label>
+            <label for="end">End
+              <input id="end" name="end" type="time">
+            </label>
+          </div>
+          <label for="capacity">Capacity
+            <select id="capacity" name="capacity">
+              <option>Any capacity</option>
+              <option>2-4 people</option>
+              <option>5-8 people</option>
+              <option>9-12 people</option>
+            </select>
+          </label>
+          <button class="button" type="submit">Filter Rooms</button>
+        </form>
+      </aside>
+    </section>
+    <section class="section grid three compact" aria-label="Available room list">
+      <article class="card">
+        <div class="room-image"><img src="images/room-discussion.svg" alt="Discussion room with table and display"></div>
+        <span class="status available">Available</span>
+        <h2>Discussion Room A-204</h2>
+        <ul class="room-meta">
+          <li><span>Capacity</span><strong>8 users</strong></li>
+          <li><span>Next slot</span><strong>10:00 AM</strong></li>
+        </ul>
+        <div class="actions"><a class="button small" href="room-details.html">View Details</a><a class="button small secondary" href="booking.html">Book</a></div>
+      </article>
+      <article class="card">
+        <div class="room-image"><img src="images/room-study.svg" alt="Quiet study room with desks"></div>
+        <span class="status pending">Pending</span>
+        <h2>Learning Space B-112</h2>
+        <ul class="room-meta">
+          <li><span>Capacity</span><strong>6 users</strong></li>
+          <li><span>Next slot</span><strong>2:00 PM</strong></li>
+        </ul>
+        <div class="actions"><a class="button small" href="room-details.html">View Details</a><a class="button small secondary" href="booking.html">Book</a></div>
+      </article>
+      <article class="card">
+        <div class="room-image"><img src="images/room-media.svg" alt="Media room with display wall"></div>
+        <span class="status conflict">Conflict</span>
+        <h2>Media Room C-301</h2>
+        <ul class="room-meta">
+          <li><span>Capacity</span><strong>10 users</strong></li>
+          <li><span>Next slot</span><strong>4:30 PM</strong></li>
+        </ul>
+        <div class="actions"><a class="button small" href="room-details.html">View Details</a><a class="button small secondary" href="booking.html">Book</a></div>
+      </article>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="footer-shell"><span>Responsive room availability grid for desktop and mobile users.</span><a href="booking.html">Book a space</a></div></footer>
+  <script src="js/script.js" defer></script>
+</body>
+</html>
+
+
+

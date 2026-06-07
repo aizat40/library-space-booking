@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Space Booking System | Admin Login</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/auth.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <nav class="nav-shell" aria-label="Primary navigation">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true">LB</span>
+        <span><strong>Library Booking</strong><small>Tunku Tun Aminah Library</small></span>
+      </a>
+      <div class="nav-links">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="availability.html">Availability</a>
+        <a class="nav-link" href="booking.html">Book a Space</a>
+        <a class="nav-link" href="dashboard.html">Dashboard</a>
+        <a class="nav-link" href="help.html">Help</a>
+      </div>
+      <div class="nav-actions">
+        <a class="button small ghost" href="login.html">Student Login</a>
+        <a class="button small admin-link" href="admin-login.html">Admin</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="page-title">
+      <div class="section">
+        <p class="eyebrow">Administrator Access</p>
+        <h1>Admin login</h1>
+        <p>Authenticate before opening room, booking, user, and reporting management tools.</p>
+      </div>
+    </section>
+
+    <section class="section auth-shell">
+      <article class="form-panel auth-panel">
+        <h2>Administrator credentials</h2>
+        <form id="admin-login-form" novalidate>
+          <label for="admin-username">Username
+            <input id="admin-username" name="admin-username" type="text" autocomplete="username" required>
+          </label>
+          <label for="admin-password">Password
+            <input id="admin-password" name="admin-password" type="password" autocomplete="current-password" required>
+          </label>
+          <button class="button" type="submit">Login as Administrator</button>
+        </form>
+        <p class="helper-text">Prototype credentials are provided in the project requirements.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-shell">
+      <span>Restricted administrator access.</span>
+      <a href="index.html">Return home</a>
+    </div>
+  </footer>
+</body>
+</html>
+
+

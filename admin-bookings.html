@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Space Booking System | Bookings Management</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/auth.js"></script>
+</head>
+<body class="admin-management-page admin-bookings-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header"><nav class="nav-shell" aria-label="Primary navigation"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">LB</span><span><strong>Library Booking</strong><small>Tunku Tun Aminah Library</small></span></a><div class="nav-links"><a class="nav-link" href="index.html">Home</a><a class="nav-link" href="availability.html">Availability</a><a class="nav-link" href="booking.html">Book a Space</a><a class="nav-link" href="dashboard.html">Dashboard</a><a class="nav-link" href="help.html">Help</a></div><div class="nav-actions"><a class="button small ghost" href="login.html">Login</a><a class="button small admin-link" href="admin-login.html">Admin</a></div></nav></header>
+  <main id="main">
+    <section class="page-title"><div class="section"><p class="eyebrow">Bookings Management</p><h1>Review reservation transactions</h1><p>Administrators can track all booking activity and update reservation statuses.</p></div></section>
+    <section class="section">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>ID</th><th>User</th><th>Room</th><th>Date</th><th>Status</th><th>Admin action</th></tr></thead>
+          <tbody>
+            <tr><td>LB-204-0626</td><td>Nuraizat</td><td>A-204</td><td>10 June 2026</td><td><span class="status confirmed">Confirmed</span></td><td><select aria-label="Action for booking LB-204-0626"><option>Keep confirmed</option><option>Mark pending</option><option>Cancel</option></select></td></tr>
+            <tr><td>LB-112-0626</td><td>Syahmi</td><td>B-112</td><td>12 June 2026</td><td><span class="status pending">Pending</span></td><td><select aria-label="Action for booking LB-112-0626"><option>Approve</option><option>Request changes</option><option>Cancel</option></select></td></tr>
+            <tr><td>LB-301-0626</td><td>Ilham</td><td>C-301</td><td>12 June 2026</td><td><span class="status conflict">Conflict</span></td><td><select aria-label="Action for booking LB-301-0626"><option>Assign new room</option><option>Cancel</option><option>Contact user</option></select></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="footer-shell"><span>Admin booking transaction management.</span><a href="admin-dashboard.html">Admin dashboard</a></div></footer>
+  <script src="js/script.js" defer></script>
+</body>
+</html>
+
+
+

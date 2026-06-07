@@ -1,0 +1,242 @@
+(() => {
+  "use strict";
+
+  const SESSION_KEYS = {
+    loggedIn: "isLoggedIn",
+    role: "userRole",
+    userId: "currentUserId",
+    message: "authMessage",
+  };
+
+  const USER_PAGES = new Set([
+    "availability.html",
+    "room-details.html",
+    "booking.html",
+    "confirmation.html",
+    "dashboard.html",
+    "profile.html",
+    "history.html",
+    "notifications.html",
+    "manage-bookings.html",
+    "edit-booking.html",
+    "cancel-booking.html",
+    "help.html",
+  ]);
+
+  const ADMIN_PAGES = new Set([
+    "admin-dashboard.html",
+    "admin-rooms.html",
+    "admin-bookings.html",
+    "admin-users.html",
+    "admin-reports.html",
+  ]);
+
+  const currentPage = window.location.pathname.split("/").pop() || "index.html";
+  document.documentElement.classList.add("auth-loading");
+
+  const readSession = () => ({
+    isLoggedIn: sessionStorage.getItem(SESSION_KEYS.loggedIn) === "true",
+    userRole: sessionStorage.getItem(SESSION_KEYS.role) || "",
+    userId: sessionStorage.getItem(SESSION_KEYS.userId) || "",
+  });
+
+  const setSession = (role, userId = "") => {
+    sessionStorage.setItem(SESSION_KEYS.loggedIn, "true");
+    sessionStorage.setItem(SESSION_KEYS.role, role);
+    sessionStorage.setItem(SESSION_KEYS.userId, userId);
+  };
+
+  const clearSession = () => {
+    sessionStorage.removeItem(SESSION_KEYS.loggedIn);
+    sessionStorage.removeItem(SESSION_KEYS.role);
+    sessionStorage.removeItem(SESSION_KEYS.userId);
+  };
+
+  const homeForRole = (role) => (role === "admin" ? "admin-dashboard.html" : "dashboard.html");
+
+  const denyAccess = () => {
+    clearSession();
+    sessionStorage.setItem(SESSION_KEYS.message, "Please log in first.");
+    window.location.replace("login.html");
+  };
+
+  const requiredRole = ADMIN_PAGES.has(currentPage)
+    ? "admin"
+    : USER_PAGES.has(currentPage)
+      ? "student"
+      : "";
+
+  const session = readSession();
+
+  if (requiredRole && (!session.isLoggedIn || session.userRole !== requiredRole)) {
+    denyAccess();
+    return;
+  }
+
+  if (currentPage === "admin.html") {
+    if (session.isLoggedIn && session.userRole === "admin") {
+      window.location.replace("admin-dashboard.html");
+    } else {
+      denyAccess();
+    }
+    return;
+  }
+
+  if (currentPage === "reports.html") {
+    if (session.isLoggedIn && session.userRole === "admin") {
+      window.location.replace("admin-reports.html");
+    } else {
+      denyAccess();
+    }
+    return;
+  }
+
+  if (["login.html", "admin-login.html"].includes(currentPage) && session.isLoggedIn) {
+    window.location.replace(homeForRole(session.userRole));
+    return;
+  }
+
+  const navLink = (href, label, activePage = href) => {
+    const active = currentPage === activePage ? " active" : "";
+    return `<a class="nav-link${active}" href="${href}">${label}</a>`;
+  };
+
+  const publicNavigation = () => `
+    <a class="brand" href="index.html">
+      <span class="brand-mark" aria-hidden="true">LB</span>
+      <span><strong>Library Booking</strong><small>Tunku Tun Aminah Library</small></span>
+    </a>
+    <div class="nav-links">
+      ${navLink("index.html", "Home", "index.html")}
+      <a class="nav-link" href="index.html#about">About System</a>
+      <a class="nav-link" href="index.html#features">Features</a>
+    </div>
+    <div class="nav-actions">
+      <a class="button small ghost" href="login.html">Login</a>
+      <a class="button small" href="login.html#register">Register</a>
+    </div>
+  `;
+
+  const userNavigation = () => `
+    <a class="brand" href="index.html">
+      <span class="brand-mark" aria-hidden="true">LB</span>
+      <span><strong>Library Booking</strong><small>Tunku Tun Aminah Library</small></span>
+    </a>
+    <div class="nav-links">
+      ${navLink("index.html", "Home", "index.html")}
+      ${navLink("availability.html", "Availability")}
+      ${navLink("booking.html", "Book a Space")}
+      ${navLink("dashboard.html", "Dashboard")}
+      ${navLink("help.html", "Help")}
+    </div>
+    <div class="nav-actions">
+      <button class="button small warning" type="button" data-auth-logout>Logout</button>
+    </div>
+  `;
+
+  const adminNavigation = () => `
+    <a class="brand" href="admin-dashboard.html">
+      <span class="brand-mark" aria-hidden="true">LB</span>
+      <span><strong>Library Booking</strong><small>Administrator Portal</small></span>
+    </a>
+    <div class="nav-links">
+      ${navLink("admin-dashboard.html", "Admin Dashboard")}
+      ${navLink("admin-rooms.html", "Rooms Management")}
+      ${navLink("admin-bookings.html", "Bookings Management")}
+      ${navLink("admin-users.html", "Users Management")}
+      ${navLink("admin-reports.html", "Reports")}
+    </div>
+    <div class="nav-actions">
+      <button class="button small warning" type="button" data-auth-logout>Logout</button>
+    </div>
+  `;
+
+  const renderNavigation = () => {
+    const navigation = document.querySelector(".nav-shell");
+    if (!navigation) return;
+    const activeSession = readSession();
+    if (!activeSession.isLoggedIn) {
+      navigation.innerHTML = publicNavigation();
+    } else if (activeSession.userRole === "admin") {
+      navigation.innerHTML = adminNavigation();
+    } else {
+      navigation.innerHTML = userNavigation();
+    }
+  };
+
+  const displayAccessMessage = () => {
+    const message = sessionStorage.getItem(SESSION_KEYS.message);
+    if (!message) return;
+    sessionStorage.removeItem(SESSION_KEYS.message);
+
+    const main = document.querySelector("main");
+    if (main) {
+      const notice = document.createElement("div");
+      notice.className = "section compact";
+      notice.innerHTML = `<div class="alert conflict auth-message" role="alert">${message}</div>`;
+      main.prepend(notice);
+    }
+    window.alert(message);
+  };
+
+  const initializeLogout = () => {
+    document.querySelectorAll("[data-auth-logout]").forEach((button) => {
+      button.addEventListener("click", () => {
+        clearSession();
+        window.location.replace("login.html");
+      });
+    });
+  };
+
+  const initializeAdminLogin = () => {
+    const form = document.getElementById("admin-login-form");
+    if (!form) return;
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const username = form.elements["admin-username"].value.trim();
+      const password = form.elements["admin-password"].value;
+      let error = form.querySelector(".admin-login-error");
+
+      if (username !== "admin" || password !== "admin123") {
+        if (!error) {
+          error = document.createElement("p");
+          error.className = "field-error admin-login-error";
+          error.setAttribute("role", "alert");
+          form.querySelector("button[type='submit']").insertAdjacentElement("beforebegin", error);
+        }
+        error.textContent = "Invalid administrator username or password.";
+        form.elements["admin-password"].value = "";
+        form.elements["admin-password"].focus();
+        return;
+      }
+
+      setSession("admin", "admin");
+      window.location.replace("admin-dashboard.html");
+    });
+  };
+
+  document.addEventListener("DOMContentLoaded", () => {
+    renderNavigation();
+    initializeLogout();
+    initializeAdminLogin();
+    displayAccessMessage();
+    document.documentElement.classList.remove("auth-loading");
+  });
+
+  window.AppAuth = {
+    getSession: readSession,
+    isLoggedIn: () => readSession().isLoggedIn,
+    hasRole: (role) => {
+      const activeSession = readSession();
+      return activeSession.isLoggedIn && activeSession.userRole === role;
+    },
+    login(role, userId = "") {
+      setSession(role, userId);
+    },
+    logout() {
+      clearSession();
+      window.location.replace("login.html");
+    },
+  };
+})();

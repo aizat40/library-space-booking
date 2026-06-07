@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Space Booking System | Notifications</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/auth.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <nav class="nav-shell" aria-label="Primary navigation">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">LB</span><span><strong>Library Booking</strong><small>Tunku Tun Aminah Library</small></span></a>
+      <div class="nav-links">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="availability.html">Availability</a>
+        <a class="nav-link" href="booking.html">Book a Space</a>
+        <a class="nav-link active" href="dashboard.html">Dashboard</a>
+        <a class="nav-link" href="help.html">Help</a>
+      </div>
+      <div class="nav-actions"><a class="button small ghost" href="login.html">Login</a><a class="button small admin-link" href="admin-login.html">Admin</a></div>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="page-title"><div class="section"><p class="eyebrow">Notifications</p><h1>Reservation notices and reminders</h1><p>Status alerts use clear colors for confirmed bookings, pending requests, and booking conflicts.</p></div></section>
+    <section class="section grid three">
+      <article class="alert confirmed"><span class="status confirmed">Confirmed</span><h2>Room A-204 approved</h2><p>Your booking for 10 June 2026 from 10:00 AM to 12:00 PM has been confirmed.</p></article>
+      <article class="alert pending"><span class="status pending">Pending</span><h2>Room B-112 request</h2><p>Your request is waiting for administrator review because another group selected a nearby slot.</p></article>
+      <article class="alert conflict"><span class="status conflict">Conflict</span><h2>Media Room C-301</h2><p>The selected time overlaps with a confirmed reservation. Choose another time or room.</p></article>
+    </section>
+    <section class="section compact">
+      <article class="panel">
+        <h2>Reminder schedule</h2>
+        <ul class="notice-list">
+          <li><span>After confirmation</span><strong>Booking status notice is shown in the dashboard.</strong></li>
+          <li><span>30 minutes before</span><strong>System reminder appears before the reserved time.</strong></li>
+          <li><span>After cancellation</span><strong>Cancellation confirmation is recorded in history.</strong></li>
+        </ul>
+      </article>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="footer-shell"><span>Color-coded notification states for confirmed, pending, and conflict messages.</span><a href="manage-bookings.html">Manage bookings</a></div></footer>
+  <script src="js/script.js" defer></script>
+</body>
+</html>
+
+
+

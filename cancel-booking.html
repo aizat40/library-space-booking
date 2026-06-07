@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Space Booking System | Cancel Booking</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/auth.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <nav class="nav-shell" aria-label="Primary navigation">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">LB</span><span><strong>Library Booking</strong><small>Tunku Tun Aminah Library</small></span></a>
+      <div class="nav-links">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="availability.html">Availability</a>
+        <a class="nav-link" href="booking.html">Book a Space</a>
+        <a class="nav-link active" href="dashboard.html">Dashboard</a>
+        <a class="nav-link" href="help.html">Help</a>
+      </div>
+      <div class="nav-actions"><a class="button small ghost" href="login.html">Login</a><a class="button small admin-link" href="admin-login.html">Admin</a></div>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="page-title"><div class="section"><p class="eyebrow">Cancel Booking</p><h1>Cancel reservation LB-204-0626</h1><p>Users can remove a reservation from the booking management section and keep the system records clear.</p></div></section>
+    <section class="section grid two">
+      <article class="alert conflict">
+        <span class="status conflict">Cancellation</span>
+        <h2>Reservation selected</h2>
+        <ul class="detail-list">
+          <li><span>Room</span><strong>Discussion Room A-204</strong></li>
+          <li><span>Date</span><strong>10 June 2026</strong></li>
+          <li><span>Time</span><strong>10:00 AM - 12:00 PM</strong></li>
+        </ul>
+      </article>
+      <article class="form-panel">
+        <h2>Reason</h2>
+        <form action="notifications.html" method="get">
+          <label for="reason">Cancellation reason
+            <select id="reason" name="reason">
+              <option>Schedule changed</option>
+              <option>Room no longer needed</option>
+              <option>Selected wrong time</option>
+              <option>Other</option>
+            </select>
+          </label>
+          <label for="cancel-note">Notes
+            <textarea id="cancel-note" name="cancel-note"></textarea>
+          </label>
+          <button class="button warning" type="submit">Confirm Cancellation</button>
+          <a class="button secondary" href="manage-bookings.html">Keep Booking</a>
+        </form>
+      </article>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="footer-shell"><span>Cancel flow supports reservation management from the user dashboard.</span><a href="manage-bookings.html">Back to management</a></div></footer>
+  <script src="js/script.js" defer></script>
+</body>
+</html>
+
+
+

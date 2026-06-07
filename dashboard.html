@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Space Booking System | User Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/auth.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <nav class="nav-shell" aria-label="Primary navigation">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">LB</span><span><strong>Library Booking</strong><small>Tunku Tun Aminah Library</small></span></a>
+      <div class="nav-links">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="availability.html">Availability</a>
+        <a class="nav-link" href="booking.html">Book a Space</a>
+        <a class="nav-link active" href="dashboard.html">Dashboard</a>
+        <a class="nav-link" href="help.html">Help</a>
+      </div>
+      <div class="nav-actions"><a class="button small ghost" href="login.html">Login</a><a class="button small admin-link" href="admin-login.html">Admin</a></div>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="page-title">
+      <div class="section">
+        <p class="eyebrow">User Dashboard</p>
+        <h1>Your booking hub</h1>
+        <p>Manage current reservations, booking history, notifications, and room availability from one student dashboard.</p>
+      </div>
+    </section>
+    <section class="section grid four" aria-label="User dashboard summary">
+      <article class="card stat"><span><strong>2</strong><span>Upcoming</span></span><span class="feature-icon">B</span></article>
+      <article class="card stat"><span><strong>8</strong><span>Past bookings</span></span><span class="feature-icon">H</span></article>
+      <article class="card stat"><span><strong>3</strong><span>Notifications</span></span><span class="feature-icon">N</span></article>
+      <article class="card stat"><span><strong>1</strong><span>Pending edit</span></span><span class="feature-icon">E</span></article>
+    </section>
+    <section class="section grid two compact">
+      <article class="panel">
+        <span class="status confirmed">Confirmed</span>
+        <h2>Next reservation</h2>
+        <ul class="detail-list">
+          <li><span>Room</span><strong>Discussion Room A-204</strong></li>
+          <li><span>Date</span><strong>10 June 2026</strong></li>
+          <li><span>Time</span><strong>10:00 AM - 12:00 PM</strong></li>
+        </ul>
+        <div class="actions"><a class="button small" href="manage-bookings.html">Manage Booking</a><a class="button small secondary" href="notifications.html">Notifications</a></div>
+      </article>
+      <article class="panel">
+        <h2>Quick actions</h2>
+        <div class="actions">
+          <a class="button" href="availability.html">Check Rooms</a>
+          <a class="button secondary" href="booking.html">Book a Space</a>
+          <a class="button secondary" href="history.html">Booking History</a>
+          <a class="button secondary" href="profile.html">Profile</a>
+          <a class="button ghost" href="help.html">Help</a>
+        </div>
+      </article>
+    </section>
+    <section class="section compact">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Reservation</th><th>Room</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td>LB-204-0626</td><td>Discussion Room A-204</td><td>10 June 2026</td><td><span class="status confirmed">Confirmed</span></td><td><a class="button small" href="manage-bookings.html">Manage</a></td></tr>
+            <tr><td>LB-112-0626</td><td>Learning Space B-112</td><td>12 June 2026</td><td><span class="status pending">Pending</span></td><td><a class="button small" href="edit-booking.html">Edit</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="footer-shell"><span>Dashboard for booking management, history, and notifications.</span><a href="history.html">View history</a></div></footer>
+  <script src="js/script.js" defer></script>
+</body>
+</html>
+
+
+

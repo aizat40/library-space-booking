@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Space Booking System | Users Management</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/auth.js"></script>
+</head>
+<body class="admin-management-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header"><nav class="nav-shell" aria-label="Primary navigation"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">LB</span><span><strong>Library Booking</strong><small>Tunku Tun Aminah Library</small></span></a><div class="nav-links"><a class="nav-link" href="index.html">Home</a><a class="nav-link" href="availability.html">Availability</a><a class="nav-link" href="booking.html">Book a Space</a><a class="nav-link" href="dashboard.html">Dashboard</a><a class="nav-link" href="help.html">Help</a></div><div class="nav-actions"><a class="button small ghost" href="login.html">Login</a><a class="button small admin-link" href="admin-login.html">Admin</a></div></nav></header>
+  <main id="main">
+    <section class="page-title"><div class="section"><p class="eyebrow">Users Management</p><h1>Manage students and staff</h1><p>Separate user roles support orderly access for students and administrators.</p></div></section>
+    <section class="section grid two">
+      <article class="table-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>ID</th><th>Role</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Nuraizat bin Mohd Azhar</td><td>CI250058</td><td>Student</td><td><span class="status confirmed">Active</span></td></tr>
+            <tr><td>Muhammad Syahmi bin Azhan</td><td>CI250003</td><td>Student</td><td><span class="status confirmed">Active</span></td></tr>
+            <tr><td>Library Staff</td><td>ADM001</td><td>Administrator</td><td><span class="status pending">Review</span></td></tr>
+          </tbody>
+        </table>
+      </article>
+      <article class="form-panel">
+        <h2>Update role</h2>
+        <form action="admin-users.html" method="get">
+          <label for="user-id">User ID<input id="user-id" name="user-id" type="text"></label>
+          <label for="role">Role<select id="role" name="role"><option>Student</option><option>Administrator</option><option>Library Staff</option></select></label>
+          <button class="button" type="submit">Save User</button>
+        </form>
+      </article>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="footer-shell"><span>Admin user role and account management.</span><a href="admin-dashboard.html">Admin dashboard</a></div></footer>
+  <script src="js/script.js" defer></script>
+</body>
+</html>
+
+
+
