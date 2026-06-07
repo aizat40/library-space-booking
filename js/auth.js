@@ -101,67 +101,63 @@
     return `<a class="nav-link${active}" href="${href}">${label}</a>`;
   };
 
-  const publicNavigation = () => `
-    <a class="brand" href="index.html">
-      <span class="brand-mark" aria-hidden="true">LB</span>
-      <span><strong>Library Booking</strong><small>Tunku Tun Aminah Library</small></span>
-    </a>
-    <div class="nav-links">
+  const publicNavigation = () => ({
+    links: `
       ${navLink("index.html", "Home", "index.html")}
       <a class="nav-link" href="index.html#about">About System</a>
       <a class="nav-link" href="index.html#features">Features</a>
-    </div>
-    <div class="nav-actions">
+    `,
+    actions: `
       <a class="button small ghost" href="login.html">Login</a>
       <a class="button small" href="login.html#register">Register</a>
-    </div>
-  `;
+    `,
+  });
 
-  const userNavigation = () => `
-    <a class="brand" href="index.html">
-      <span class="brand-mark" aria-hidden="true">LB</span>
-      <span><strong>Library Booking</strong><small>Tunku Tun Aminah Library</small></span>
-    </a>
-    <div class="nav-links">
+  const userNavigation = () => ({
+    links: `
       ${navLink("index.html", "Home", "index.html")}
       ${navLink("availability.html", "Availability")}
       ${navLink("booking.html", "Book a Space")}
       ${navLink("dashboard.html", "Dashboard")}
       ${navLink("help.html", "Help")}
-    </div>
-    <div class="nav-actions">
+    `,
+    actions: `
       <button class="button small warning" type="button" data-auth-logout>Logout</button>
-    </div>
-  `;
+    `,
+  });
 
-  const adminNavigation = () => `
-    <a class="brand" href="admin-dashboard.html">
-      <span class="brand-mark" aria-hidden="true">LB</span>
-      <span><strong>Library Booking</strong><small>Administrator Portal</small></span>
-    </a>
-    <div class="nav-links">
+  const adminNavigation = () => ({
+    links: `
       ${navLink("admin-dashboard.html", "Admin Dashboard")}
       ${navLink("admin-rooms.html", "Rooms Management")}
       ${navLink("admin-bookings.html", "Bookings Management")}
       ${navLink("admin-users.html", "Users Management")}
       ${navLink("admin-reports.html", "Reports")}
-    </div>
-    <div class="nav-actions">
+    `,
+    actions: `
       <button class="button small warning" type="button" data-auth-logout>Logout</button>
-    </div>
-  `;
+    `,
+  });
 
   const renderNavigation = () => {
     const navigation = document.querySelector(".nav-shell");
     if (!navigation) return;
+    const links = navigation.querySelector(".nav-links");
+    const actions = navigation.querySelector(".nav-actions");
+    if (!links || !actions) return;
+
     const activeSession = readSession();
+    let navigationContent;
     if (!activeSession.isLoggedIn) {
-      navigation.innerHTML = publicNavigation();
+      navigationContent = publicNavigation();
     } else if (activeSession.userRole === "admin") {
-      navigation.innerHTML = adminNavigation();
+      navigationContent = adminNavigation();
     } else {
-      navigation.innerHTML = userNavigation();
+      navigationContent = userNavigation();
     }
+
+    links.innerHTML = navigationContent.links;
+    actions.innerHTML = navigationContent.actions;
   };
 
   const displayAccessMessage = () => {

@@ -84,27 +84,24 @@ a {
 }
 
 .brand {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 0.7rem;
+  gap: 12px;
   min-width: 220px;
   text-decoration: none;
 }
 
-.brand-mark {
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  border-radius: 8px;
-  background: var(--teal);
-  color: #fff;
-  font-weight: 800;
+.logo {
+  width: 50px;
+  height: 50px;
+  flex: 0 0 50px;
+  object-fit: contain;
 }
 
-.brand strong,
-.brand small {
-  display: block;
+.brand span {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
 }
 
 .brand small {
@@ -768,10 +765,8 @@ th {
   color: var(--muted);
 }
 
-.footer-shell a {
-  color: var(--teal-dark);
-  font-weight: 800;
-  text-decoration: none;
+.footer-shell span:last-child {
+  text-align: right;
 }
 
 @media (max-width: 920px) {
@@ -808,12 +803,27 @@ th {
 }
 
 @media (max-width: 640px) {
+  .nav-shell {
+    gap: 0.6rem;
+    padding: 0.65rem 1rem;
+  }
+
   .brand {
     min-width: auto;
   }
 
+  .logo {
+    width: 44px;
+    height: 44px;
+    flex-basis: 44px;
+  }
+
+  .brand strong {
+    font-size: 0.95rem;
+  }
+
   .brand small {
-    display: none;
+    font-size: 0.72rem;
   }
 
   .nav-actions {
@@ -822,6 +832,27 @@ th {
 
   .nav-actions .button {
     flex: 1;
+  }
+
+  .nav-links {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: thin;
+  }
+
+  .nav-link {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .footer-shell {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .footer-shell span:last-child {
+    text-align: left;
   }
 
   main {
