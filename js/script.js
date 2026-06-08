@@ -165,7 +165,7 @@
       {
         id: "CI250058",
         name: "Nuraizat bin Mohd Azhar",
-        email: "nuraizat@siswa.uthm.edu.my",
+        email: "nuraizat@uthm.edu.my",
         password: "student123",
         role: "Student",
         status: "active",
@@ -173,7 +173,7 @@
       {
         id: "CI250003",
         name: "Muhammad Syahmi bin Azhan",
-        email: "syahmi@siswa.uthm.edu.my",
+        email: "syahmi@uthm.edu.my",
         password: "student123",
         role: "Student",
         status: "active",
@@ -181,7 +181,7 @@
       {
         id: "CI250023",
         name: "Muhammad Ilham Hazim bin Rosdi",
-        email: "ilham@siswa.uthm.edu.my",
+        email: "ilham@uthm.edu.my",
         password: "student123",
         role: "Student",
         status: "active",
