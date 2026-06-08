@@ -117,7 +117,6 @@
     links: `
       ${navLink("index.html", "Home", "index.html")}
       ${navLink("availability.html", "Availability")}
-      ${navLink("booking.html", "Book a Space")}
       ${navLink("dashboard.html", "Dashboard")}
       ${navLink("help.html", "Help")}
     `,

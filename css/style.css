@@ -74,9 +74,9 @@ a {
 }
 
 .nav-shell {
-  max-width: 1180px;
+  max-width: 1300px; /* Tukar nilai ini untuk lebih ruang */
   margin: 0 auto;
-  min-height: 76px;
+  min-height: 76px; 
   padding: 0.75rem 1.25rem;
   display: flex;
   align-items: center;
@@ -119,7 +119,7 @@ a {
 .nav-links {
   flex: 1;
   justify-content: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* Tukar dari wrap kepada nowrap */
 }
 
 .nav-link {
@@ -128,6 +128,7 @@ a {
   color: var(--muted);
   font-weight: 700;
   text-decoration: none;
+  white-space: nowrap; /* Tambah baris ini */
 }
 
 .nav-link:hover,
@@ -177,6 +178,11 @@ a {
 .button.small {
   min-height: 38px;
   padding: 0.5rem 0.75rem;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
 }
 
 .admin-link {
@@ -514,6 +520,75 @@ textarea:focus {
 .field-error {
   color: #a61b1b;
   font-weight: 700;
+}
+
+.booking-dialog {
+  width: min(680px, calc(100% - 2rem));
+  max-height: calc(100vh - 2rem);
+  padding: 0;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+
+.booking-dialog::backdrop {
+  background: rgba(16, 33, 43, 0.58);
+}
+
+.booking-dialog-content {
+  padding: 1.5rem;
+}
+
+.booking-dialog-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.booking-dialog-header h2,
+.booking-dialog-header p {
+  margin: 0;
+}
+
+.dialog-close {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.dialog-close:hover,
+.dialog-close:focus {
+  border-color: var(--teal);
+  color: var(--teal-dark);
+}
+
+.booking-room-summary {
+  margin: 0 0 1rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--soft);
+}
+
+.booking-dialog .alert h3 {
+  margin-bottom: 0.35rem;
+}
+
+[hidden] {
+  display: none !important;
 }
 
 .data-toolbar {
@@ -872,6 +947,15 @@ th {
   .bar-row,
   .data-toolbar {
     grid-template-columns: 1fr;
+  }
+
+  .booking-dialog {
+    width: calc(100% - 1rem);
+    max-height: calc(100vh - 1rem);
+  }
+
+  .booking-dialog-content {
+    padding: 1rem;
   }
 
   .room-meta li,

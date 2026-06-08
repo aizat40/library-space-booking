@@ -3,10 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Library Space Booking System | Book a Space</title>
+  <title>Library Space Booking System | Booking Redirect</title>
   <link rel="icon" type="image/png" href="images/UTHM.png" sizes="32x32">
   <link rel="stylesheet" href="css/style.css">
   <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const parameters = new URLSearchParams(window.location.search);
+      parameters.set("book", "1");
+      window.location.replace(`availability.html?${parameters.toString()}`);
+    });
+  </script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -26,66 +33,11 @@
   <main id="main">
     <section class="page-title">
       <div class="section">
-        <p class="eyebrow">Reservation</p>
-        <h1>Create a room booking</h1>
-        <p>Submit the room number, reservation date, time, and group details required by the report's room reservation page.</p>
+        <p class="eyebrow">Booking</p>
+        <h1>Opening room availability</h1>
+        <p>Room bookings are now completed directly from the availability page.</p>
+        <a class="button" href="availability.html">Continue to Availability</a>
       </div>
-    </section>
-    <section class="section grid two">
-      <article class="form-panel">
-        <h2>Booking details</h2>
-        <form action="confirmation.html" method="get">
-          <div class="form-grid">
-            <label for="room">Room
-              <select id="room" name="room" required>
-                <option>Discussion Room A-204</option>
-                <option>Learning Space B-112</option>
-                <option>Media Room C-301</option>
-                <option>Room D-018</option>
-              </select>
-            </label>
-            <label for="participants">Participants
-              <input id="participants" name="participants" type="number" min="1" max="12" value="4" required>
-            </label>
-          </div>
-          <div class="form-grid">
-            <label for="booking-date">Date
-              <input id="booking-date" name="booking-date" type="date" required>
-            </label>
-            <label for="purpose">Purpose
-              <select id="purpose" name="purpose">
-                <option>Group discussion</option>
-                <option>Presentation practice</option>
-                <option>Research meeting</option>
-                <option>Quiet study</option>
-              </select>
-            </label>
-          </div>
-          <div class="form-grid">
-            <label for="start-time">Start time
-              <input id="start-time" name="start-time" type="time" required>
-            </label>
-            <label for="end-time">End time
-              <input id="end-time" name="end-time" type="time" required>
-            </label>
-          </div>
-          <label for="notes">Additional notes
-            <textarea id="notes" name="notes" placeholder="Example: Need a display for presentation practice."></textarea>
-          </label>
-          <button class="button" type="submit">Confirm Booking</button>
-        </form>
-      </article>
-      <aside class="panel">
-        <span class="status available">Room available</span>
-        <h2>Reservation summary</h2>
-        <ul class="detail-list">
-          <li><span>Selected room</span><strong>Discussion Room A-204</strong></li>
-          <li><span>Capacity</span><strong>8 users</strong></li>
-          <li><span>Current status</span><strong>Available</strong></li>
-          <li><span>Reminder</span><strong>Check in at the service desk</strong></li>
-        </ul>
-        <p>The confirmation page will show the final reservation status and notification message.</p>
-      </aside>
     </section>
   </main>
   <footer class="site-footer">
@@ -94,9 +46,5 @@
       <span>Library Space Booking System</span>
     </div>
   </footer>
-  <script src="js/script.js" defer></script>
 </body>
 </html>
-
-
-

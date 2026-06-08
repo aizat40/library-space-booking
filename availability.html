@@ -27,8 +27,8 @@
     <section class="page-title">
       <div class="section">
         <p class="eyebrow">Room Availability</p>
-        <h1>Find an open study space</h1>
-        <p>Use the floor-plan view and room cards to identify available discussion zones, pending slots, and conflict areas before booking.</p>
+        <h1>Find and book an open study space</h1>
+        <p>Compare room availability, capacity, and equipment, then book the selected space without leaving this page.</p>
       </div>
     </section>
     <section class="section floor-layout">
@@ -76,7 +76,7 @@
           <li><span>Capacity</span><strong>8 users</strong></li>
           <li><span>Next slot</span><strong>10:00 AM</strong></li>
         </ul>
-        <div class="actions"><a class="button small" href="room-details.html">View Details</a><a class="button small secondary" href="booking.html">Book</a></div>
+        <div class="actions"><a class="button small" href="room-details.html?room=room-a204">View Details</a><button class="button small secondary" type="button" data-book-room="room-a204">Book</button></div>
       </article>
       <article class="card">
         <div class="room-image"><img src="images/room-study.svg" alt="Quiet study room with desks"></div>
@@ -86,7 +86,7 @@
           <li><span>Capacity</span><strong>6 users</strong></li>
           <li><span>Next slot</span><strong>2:00 PM</strong></li>
         </ul>
-        <div class="actions"><a class="button small" href="room-details.html">View Details</a><a class="button small secondary" href="booking.html">Book</a></div>
+        <div class="actions"><a class="button small" href="room-details.html?room=room-b112">View Details</a><button class="button small secondary" type="button" data-book-room="room-b112">Book</button></div>
       </article>
       <article class="card">
         <div class="room-image"><img src="images/room-media.svg" alt="Media room with display wall"></div>
@@ -96,9 +96,53 @@
           <li><span>Capacity</span><strong>10 users</strong></li>
           <li><span>Next slot</span><strong>4:30 PM</strong></li>
         </ul>
-        <div class="actions"><a class="button small" href="room-details.html">View Details</a><a class="button small secondary" href="booking.html">Book</a></div>
+        <div class="actions"><a class="button small" href="room-details.html?room=room-c301">View Details</a><button class="button small secondary" type="button" data-book-room="room-c301">Book</button></div>
       </article>
     </section>
+
+    <dialog id="booking-dialog" class="booking-dialog" aria-labelledby="booking-dialog-title">
+      <div class="booking-dialog-content">
+        <div class="booking-dialog-header">
+          <div>
+            <p class="eyebrow">Room Reservation</p>
+            <h2 id="booking-dialog-title">Book selected room</h2>
+          </div>
+          <button class="dialog-close" type="button" data-close-booking aria-label="Close booking form" title="Close">&times;</button>
+        </div>
+
+        <div id="booking-success" class="alert confirmed" role="status" hidden></div>
+
+        <form id="availability-booking-form" novalidate>
+          <input id="booking-room" name="room" type="hidden">
+          <ul class="detail-list booking-room-summary">
+            <li><span>Room name</span><strong id="selected-room-name">Not selected</strong></li>
+            <li><span>Capacity</span><strong id="selected-room-capacity">Not selected</strong></li>
+            <li><span>Status</span><strong id="selected-room-status">Not selected</strong></li>
+          </ul>
+
+          <div class="form-grid">
+            <label for="booking-date">Date
+              <input id="booking-date" name="booking-date" type="date" required>
+            </label>
+            <label for="participants">Number of participants
+              <input id="participants" name="participants" type="number" min="1" required>
+            </label>
+          </div>
+          <div class="form-grid">
+            <label for="start-time">Start time
+              <input id="start-time" name="start-time" type="time" required>
+            </label>
+            <label for="end-time">End time
+              <input id="end-time" name="end-time" type="time" required>
+            </label>
+          </div>
+          <div class="actions">
+            <button class="button" type="submit">Confirm Booking</button>
+            <button class="button secondary" type="button" data-close-booking>Cancel</button>
+          </div>
+        </form>
+      </div>
+    </dialog>
   </main>
   <footer class="site-footer">
     <div class="footer-shell">
@@ -109,6 +153,4 @@
   <script src="js/script.js" defer></script>
 </body>
 </html>
-
-
 

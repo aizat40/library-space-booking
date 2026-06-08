@@ -619,6 +619,18 @@
     const roomSection = document.querySelector('[aria-label="Available room list"]');
     if (!roomSection) return;
 
+    const bookingDialog = byId("booking-dialog");
+    const bookingForm = byId("availability-booking-form");
+    const bookingSuccess = byId("booking-success");
+    const bookingDate = byId("booking-date");
+    let selectedRoom = null;
+
+    if (bookingDate) {
+      const currentDate = new Date();
+      const localDate = new Date(currentDate.getTime() - currentDate.getTimezoneOffset() * 60000);
+      bookingDate.min = localDate.toISOString().slice(0, 10);
+    }
+
     const searchToolbar = buildToolbar(roomSection, {
       search: "Search by room, zone, or equipment",
       status: ["available", "pending", "conflict", "closed"],
@@ -643,14 +655,60 @@
       `;
     }
 
+    const currentFilters = () => ({
+      date: byId("date")?.value || "",
+      start: byId("start")?.value || "",
+      end: byId("end")?.value || "",
+      capacity: Number(byId("capacity")?.value || 0),
+    });
+
+    const updateSelectedRoomSummary = () => {
+      if (!selectedRoom || !bookingForm) return;
+      const data = bookingFromForm(bookingForm);
+      const status = availabilityFor(selectedRoom, data);
+      byId("selected-room-name").textContent = selectedRoom.name;
+      byId("selected-room-capacity").textContent = `${selectedRoom.capacity} users`;
+      byId("selected-room-status").textContent = titleCase(status);
+    };
+
+    const closeBookingDialog = () => {
+      if (!bookingDialog) return;
+      if (typeof bookingDialog.close === "function") {
+        bookingDialog.close();
+      } else {
+        bookingDialog.removeAttribute("open");
+      }
+    };
+
+    const openBookingDialog = (roomId, defaults = {}) => {
+      selectedRoom = store.roomById(roomId);
+      if (!selectedRoom || !bookingDialog || !bookingForm) return;
+
+      clearFormErrors(bookingForm);
+      bookingForm.reset();
+      bookingForm.hidden = false;
+      bookingSuccess.hidden = true;
+      bookingSuccess.innerHTML = "";
+
+      bookingForm.elements.room.value = selectedRoom.id;
+      bookingForm.elements["booking-date"].value = defaults.date || "";
+      bookingForm.elements["start-time"].value = defaults.start || "";
+      bookingForm.elements["end-time"].value = defaults.end || "";
+      bookingForm.elements.participants.max = selectedRoom.capacity;
+      bookingForm.elements.participants.value = Math.min(4, selectedRoom.capacity);
+      updateSelectedRoomSummary();
+
+      if (typeof bookingDialog.showModal === "function") {
+        bookingDialog.showModal();
+      } else {
+        bookingDialog.setAttribute("open", "");
+      }
+      bookingForm.elements["booking-date"].focus();
+    };
+
     const render = () => {
       const toolbar = toolbarValues(searchToolbar);
-      const filters = {
-        date: byId("date")?.value || "",
-        start: byId("start")?.value || "",
-        end: byId("end")?.value || "",
-        capacity: Number(byId("capacity")?.value || 0),
-      };
+      const filters = currentFilters();
       const rooms = sortByMode(
         store
           .all("rooms")
@@ -676,7 +734,7 @@
                   </ul>
                   <div class="actions">
                     <a class="button small" href="room-details.html?room=${encodeURIComponent(room.id)}">View Details</a>
-                    <a class="button small secondary" href="booking.html?room=${encodeURIComponent(room.id)}">Book</a>
+                    <button class="button small secondary" type="button" data-book-room="${escapeHTML(room.id)}"${room.computedStatus === "closed" ? " disabled" : ""}>Book</button>
                   </div>
                 </article>
               `
@@ -692,7 +750,73 @@
     filterForm?.addEventListener("input", debounce(render));
     filterForm?.addEventListener("change", render);
     bindToolbar(searchToolbar, render);
+
+    roomSection.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-book-room]");
+      if (!button) return;
+      openBookingDialog(button.dataset.bookRoom, currentFilters());
+    });
+
+    all("[data-close-booking]").forEach((button) => {
+      button.addEventListener("click", closeBookingDialog);
+    });
+
+    bookingDialog?.addEventListener("click", (event) => {
+      if (event.target === bookingDialog) closeBookingDialog();
+    });
+
+    bookingForm?.addEventListener("input", debounce(updateSelectedRoomSummary));
+    bookingForm?.addEventListener("change", updateSelectedRoomSummary);
+    bookingForm?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!selectedRoom) return;
+
+      const data = bookingFromForm(bookingForm);
+      const errors = validateBooking(data);
+      if (errors.length) {
+        showFormErrors(bookingForm, errors);
+        notify("Please fix the booking details.", "conflict");
+        return;
+      }
+
+      const status = availabilityFor(selectedRoom, data) === "available" ? "confirmed" : "pending";
+      const booking = store.create("bookings", { ...data, status });
+      store.createNotification({
+        bookingId: booking.id,
+        status,
+        title: `${selectedRoom.name} ${status === "confirmed" ? "confirmed" : "request received"}`,
+        message: `Your booking for ${formatDate(booking.date)} from ${formatTime(booking.start)} to ${formatTime(booking.end)} is ${status}.`,
+      });
+      writeSession({ currentBookingId: booking.id, editingBookingId: "", cancelBookingId: "" });
+
+      bookingForm.hidden = true;
+      bookingSuccess.hidden = false;
+      bookingSuccess.className = `alert ${statusClass(status)}`;
+      bookingSuccess.innerHTML = `
+        ${statusBadge(status)}
+        <h3>Booking saved successfully</h3>
+        <p><strong>${escapeHTML(selectedRoom.name)}</strong><br>${escapeHTML(formatDate(booking.date))}, ${escapeHTML(formatTime(booking.start))} - ${escapeHTML(formatTime(booking.end))}</p>
+        <p>Reservation ID: <strong>${escapeHTML(booking.id)}</strong></p>
+        <div class="actions">
+          <a class="button" href="dashboard.html">View Dashboard</a>
+          <button class="button secondary" type="button" data-book-another>Book Another Room</button>
+        </div>
+      `;
+      bookingSuccess.querySelector("[data-book-another]")?.addEventListener("click", closeBookingDialog);
+      notify("Booking saved successfully.", status);
+      render();
+    });
+
     render();
+
+    const params = queryParams();
+    if (params.get("book") === "1" && params.get("room")) {
+      openBookingDialog(params.get("room"), {
+        date: params.get("date") || "",
+        start: params.get("start") || "",
+        end: params.get("end") || "",
+      });
+    }
   };
 
   const renderRoomDetailsPage = () => {
@@ -717,7 +841,7 @@
           <li><span>Equipment</span><strong>${escapeHTML(room.equipment)}</strong></li>
           <li><span>Recommended use</span><strong>${escapeHTML(room.type)}</strong></li>
         </ul>
-        <div class="actions"><a class="button" href="booking.html?room=${encodeURIComponent(room.id)}">Book This Room</a><a class="button secondary" href="availability.html">Back to Availability</a></div>
+        <div class="actions"><a class="button" href="availability.html?room=${encodeURIComponent(room.id)}&book=1">Book This Room</a><a class="button secondary" href="availability.html">Back to Availability</a></div>
       `;
     }
 
@@ -738,71 +862,11 @@
             <td>${escapeHTML(formatDate(date))}</td>
             <td>${escapeHTML(formatTime(start))} - ${escapeHTML(formatTime(end))}</td>
             <td>${statusBadge(slotStatus)}</td>
-            <td><a class="button small ${slotStatus === "conflict" ? "ghost" : ""}" href="booking.html?room=${encodeURIComponent(room.id)}&date=${date}&start=${start}&end=${end}">${slotStatus === "conflict" ? "Find Other" : "Book"}</a></td>
+            <td><a class="button small ${slotStatus === "conflict" ? "ghost" : ""}" href="availability.html?room=${encodeURIComponent(room.id)}&${slotStatus === "conflict" ? "" : "book=1&"}date=${date}&start=${start}&end=${end}">${slotStatus === "conflict" ? "Find Other" : "Book"}</a></td>
           </tr>
         `;
       })
       .join("");
-  };
-
-  const initBookingPage = () => {
-    if (pageName() !== "booking.html") return;
-    const form = document.querySelector('form[action="confirmation.html"]');
-    if (!form) return;
-
-    const params = queryParams();
-    populateRoomSelect(form.elements.room, params.get("room") || "");
-    if (params.get("date")) form.elements["booking-date"].value = params.get("date");
-    if (params.get("start")) form.elements["start-time"].value = params.get("start");
-    if (params.get("end")) form.elements["end-time"].value = params.get("end");
-
-    const renderSummary = () => {
-      const data = bookingFromForm(form);
-      const room = store.roomById(data.roomId);
-      const summary = document.querySelector(".detail-list");
-      const badge = document.querySelector("aside .status");
-      const computedStatus = room ? availabilityFor(room, data) : "pending";
-      if (badge) {
-        badge.className = `status ${statusClass(computedStatus)}`;
-        badge.textContent = titleCase(computedStatus);
-      }
-      if (summary && room) {
-        summary.innerHTML = `
-          <li><span>Selected room</span><strong>${escapeHTML(room.name)}</strong></li>
-          <li><span>Capacity</span><strong>${escapeHTML(room.capacity)} users</strong></li>
-          <li><span>Current status</span><strong>${escapeHTML(titleCase(computedStatus))}</strong></li>
-          <li><span>Selected time</span><strong>${escapeHTML(formatDate(data.date))}, ${escapeHTML(formatTime(data.start))} - ${escapeHTML(formatTime(data.end))}</strong></li>
-        `;
-      }
-    };
-
-    form.addEventListener("input", debounce(renderSummary));
-    form.addEventListener("change", renderSummary);
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const data = bookingFromForm(form);
-      const errors = validateBooking(data);
-      if (errors.length) {
-        showFormErrors(form, errors);
-        notify("Please fix the booking form errors.", "conflict");
-        return;
-      }
-
-      const room = store.roomById(data.roomId);
-      const status = room.status === "available" ? "confirmed" : "pending";
-      const booking = store.create("bookings", { ...data, status });
-      store.createNotification({
-        bookingId: booking.id,
-        status,
-        title: `${room.name} ${status === "confirmed" ? "confirmed" : "request received"}`,
-        message: `Your booking for ${formatDate(booking.date)} from ${formatTime(booking.start)} to ${formatTime(booking.end)} is ${status}.`,
-      });
-      writeSession({ currentBookingId: booking.id, editingBookingId: "", cancelBookingId: "" });
-      notify("Booking saved successfully.", status);
-      window.location.href = "confirmation.html";
-    });
-
-    renderSummary();
   };
 
   const initConfirmationPage = () => {
@@ -825,7 +889,7 @@
           <li><span>Time</span><strong>${escapeHTML(formatTime(booking.start))} - ${escapeHTML(formatTime(booking.end))}</strong></li>
           <li><span>User</span><strong>${escapeHTML(booking.userName)}</strong></li>
         </ul>
-        <div class="actions"><a class="button" href="dashboard.html">Go to Dashboard</a><a class="button secondary" href="booking.html">New Booking</a></div>
+        <div class="actions"><a class="button" href="dashboard.html">Go to Dashboard</a><a class="button secondary" href="availability.html">New Booking</a></div>
       `;
     }
   };
@@ -1600,7 +1664,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     renderAvailabilityPage();
     renderRoomDetailsPage();
-    initBookingPage();
     initConfirmationPage();
     initDashboardPage();
     initHistoryPage();
