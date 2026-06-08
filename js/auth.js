@@ -91,7 +91,7 @@
     return;
   }
 
-  if (["login.html", "admin-login.html"].includes(currentPage) && session.isLoggedIn) {
+  if (["login.html", "register.html", "admin-login.html"].includes(currentPage) && session.isLoggedIn) {
     window.location.replace(homeForRole(session.userRole));
     return;
   }
@@ -109,7 +109,7 @@
     `,
     actions: `
       <a class="button small ghost" href="login.html">Login</a>
-      <a class="button small" href="login.html#register">Register</a>
+      <a class="button small" href="register.html">Register</a>
     `,
   });
 

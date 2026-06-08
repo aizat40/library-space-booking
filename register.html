@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Library Space Booking System | Login</title>
+  <title>Library Space Booking System | Register</title>
   <link rel="icon" type="image/png" href="images/UTHM.png" sizes="32x32">
   <link rel="stylesheet" href="css/style.css">
   <script src="js/auth.js"></script>
@@ -23,41 +23,48 @@
       <div class="nav-actions"></div>
     </nav>
   </header>
+
   <main id="main">
     <section class="page-title">
       <div class="section">
-        <p class="eyebrow">Secure Access</p>
-        <h1>Login</h1>
-        <p>Sign in with your UTHM account to check room availability, create bookings, and manage reservations.</p>
+        <p class="eyebrow">Create Account</p>
+        <h1>Register</h1>
+        <p>Create a student account using your UTHM identity before reserving library spaces.</p>
       </div>
     </section>
+
     <section class="section auth-shell">
       <article class="form-panel auth-panel">
-        <h2>Student access</h2>
-        <div id="login-feedback" class="alert confirmed" role="status" hidden></div>
-        <form id="login-form" novalidate>
-          <label for="login-id">Matric or staff ID
-            <input id="login-id" name="login-id" type="text" autocomplete="username" placeholder="CI250058" required>
+        <h2>Student registration</h2>
+        <form id="register-form" novalidate>
+          <label for="full-name">Full name
+            <input id="full-name" name="full-name" type="text" autocomplete="name" required>
           </label>
-          <label for="login-password">Password
-            <input id="login-password" name="login-password" type="password" autocomplete="current-password" required>
+          <label for="matric">Matric number
+            <input id="matric" name="matric" type="text" autocomplete="username" required>
           </label>
-          <button class="button" type="submit">Login</button>
+          <label for="email">UTHM email
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="name@siswa.uthm.edu.my" required>
+          </label>
+          <label for="new-password">Password
+            <input id="new-password" name="new-password" type="password" autocomplete="new-password" required>
+          </label>
+          <label for="confirm-password">Confirm password
+            <input id="confirm-password" name="confirm-password" type="password" autocomplete="new-password" required>
+          </label>
+          <button class="button" type="submit">Create Account</button>
         </form>
 
-        <div class="auth-options">
+        <div class="auth-options single">
           <div>
-            <p>Don't have an account?</p>
-            <a class="button secondary" href="register.html">Register Here</a>
-          </div>
-          <div>
-            <p>Administrator?</p>
-            <a class="button ghost" href="admin-login.html">Admin Login</a>
+            <p>Already have an account?</p>
+            <a class="button secondary" href="login.html">Login Here</a>
           </div>
         </div>
       </article>
     </section>
   </main>
+
   <footer class="site-footer">
     <div class="footer-shell">
       <span>&copy; 2026 Tunku Tun Aminah Library, UTHM.</span>
@@ -67,5 +74,3 @@
   <script src="js/script.js" defer></script>
 </body>
 </html>
-
-

@@ -1642,9 +1642,18 @@
 
   const initLoginPage = () => {
     if (pageName() !== "login.html") return;
-    const loginForm = all("form")[0];
-    const registerForm = all("form")[1];
-    if (!loginForm || !registerForm) return;
+    const loginForm = byId("login-form");
+    if (!loginForm) return;
+
+    const params = queryParams();
+    if (params.get("registered") === "1") {
+      const feedback = byId("login-feedback");
+      if (feedback) {
+        feedback.hidden = false;
+        feedback.textContent = "Account created successfully. Log in with your new credentials.";
+      }
+      if (params.get("matric")) loginForm.elements["login-id"].value = params.get("matric").toUpperCase();
+    }
 
     loginForm.addEventListener("submit", (event) => {
       event.preventDefault();
@@ -1671,6 +1680,12 @@
       notify("Login successful.");
       window.location.href = "dashboard.html";
     });
+  };
+
+  const initRegisterPage = () => {
+    if (pageName() !== "register.html") return;
+    const registerForm = byId("register-form");
+    if (!registerForm) return;
 
     registerForm.addEventListener("submit", (event) => {
       event.preventDefault();
@@ -1686,6 +1701,9 @@
       if (!user.name) errors.push({ field: "full-name", message: "Full name is required." });
       if (!user.id) errors.push({ field: "matric", message: "Matric number is required." });
       if (store.userById(user.id)) errors.push({ field: "matric", message: "This matric number is already registered." });
+      if (!/^[^\s@]+@[^\s@]*uthm\.edu\.my$/i.test(user.email)) {
+        errors.push({ field: "email", message: "Enter a valid UTHM email address." });
+      }
       if (user.password.length < 6) errors.push({ field: "new-password", message: "Password must be at least 6 characters." });
       if (registerForm.elements["new-password"].value !== registerForm.elements["confirm-password"].value) {
         errors.push({ field: "confirm-password", message: "Passwords must match." });
@@ -1696,10 +1714,7 @@
         return;
       }
       store.create("users", user);
-      window.AppAuth.login("student", user.id);
-      writeSession({ currentUserId: user.id });
-      notify("Account registered successfully.");
-      window.location.href = "dashboard.html";
+      window.location.href = `login.html?registered=1&matric=${encodeURIComponent(user.id)}`;
     });
   };
 
@@ -1742,6 +1757,7 @@
     initAdminUsersPage();
     initReportsPage();
     initLoginPage();
+    initRegisterPage();
     initProfilePage();
   });
 
