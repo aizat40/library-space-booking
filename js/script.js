@@ -56,6 +56,32 @@
     }).format(date);
   };
 
+  const localDateValue = (date = new Date()) => {
+    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+    return localDate.toISOString().slice(0, 10);
+  };
+
+  const isDateValue = (value) => {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(value || ""))) return false;
+    const [year, month, day] = value.split("-").map(Number);
+    const date = new Date(year, month - 1, day);
+    return date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day;
+  };
+
+  const timeFromMinutes = (minutes) => {
+    const hours = Math.floor(minutes / 60);
+    const remainder = minutes % 60;
+    return `${String(hours).padStart(2, "0")}:${String(remainder).padStart(2, "0")}`;
+  };
+
+  const generateTimeSlots = (openingMinutes = 8 * 60, closingMinutes = 18 * 60, durationMinutes = 2 * 60) => {
+    const slots = [];
+    for (let start = openingMinutes; start + durationMinutes <= closingMinutes; start += durationMinutes) {
+      slots.push([timeFromMinutes(start), timeFromMinutes(start + durationMinutes)]);
+    }
+    return slots;
+  };
+
   const minutesFromTime = (timeValue) => {
     const [hours, minutes] = String(timeValue || "00:00").split(":").map(Number);
     return hours * 60 + minutes;
@@ -540,6 +566,21 @@
     return conflict ? conflict.status : room.status === "closed" ? "closed" : "available";
   };
 
+  const slotStatusFor = (room, date, start, end) => {
+    if (room.status === "closed") return "conflict";
+    const overlapsSlot = store
+      .activeBookings()
+      .filter(
+        (booking) =>
+          booking.roomId === room.id &&
+          booking.date === date &&
+          overlaps(start, end, booking.start, booking.end)
+      );
+    if (overlapsSlot.some((booking) => booking.status === "conflict")) return "conflict";
+    if (overlapsSlot.length) return "booked";
+    return "available";
+  };
+
   const populateRoomSelect = (select, selectedRoomId = "") => {
     if (!select) return;
     const selected = selectedRoomId || select.value;
@@ -623,12 +664,11 @@
     const bookingForm = byId("availability-booking-form");
     const bookingSuccess = byId("booking-success");
     const bookingDate = byId("booking-date");
+    const params = queryParams();
     let selectedRoom = null;
 
     if (bookingDate) {
-      const currentDate = new Date();
-      const localDate = new Date(currentDate.getTime() - currentDate.getTimezoneOffset() * 60000);
-      bookingDate.min = localDate.toISOString().slice(0, 10);
+      bookingDate.min = localDateValue();
     }
 
     const searchToolbar = buildToolbar(roomSection, {
@@ -645,6 +685,9 @@
     if (statusFilter) statusFilter.value = "available";
 
     const filterForm = document.querySelector('form[action="availability.html"]');
+    if (isDateValue(params.get("date"))) byId("date").value = params.get("date");
+    if (params.get("start")) byId("start").value = params.get("start");
+    if (params.get("end")) byId("end").value = params.get("end");
     const capacity = byId("capacity");
     if (capacity && !capacity.dataset.enhanced) {
       capacity.dataset.enhanced = "true";
@@ -728,7 +771,10 @@
       roomSection.innerHTML = rooms.length
         ? rooms
             .map(
-              (room) => `
+              (room) => {
+                const detailsParameters = new URLSearchParams({ room: room.id });
+                if (filters.date) detailsParameters.set("date", filters.date);
+                return `
                 <article class="card">
                   <div class="room-image"><img src="${escapeHTML(imageForRoom(room))}" alt="${escapeHTML(room.name)} preview"></div>
                   ${statusBadge(room.computedStatus)}
@@ -739,7 +785,7 @@
                     <li><span>Equipment</span><strong>${escapeHTML(room.equipment)}</strong></li>
                   </ul>
                   <div class="actions">
-                    <a class="button small" href="room-details.html?room=${encodeURIComponent(room.id)}">View Details</a>
+                    <a class="button small" href="room-details.html?${escapeHTML(detailsParameters.toString())}">View Details</a>
                     ${
                       room.computedStatus === "available"
                         ? `<button class="button small secondary" type="button" data-book-room="${escapeHTML(room.id)}">Book</button>`
@@ -747,7 +793,8 @@
                     }
                   </div>
                 </article>
-              `
+              `;
+              }
             )
             .join("")
         : emptyState("No rooms match the current search or filter.");
@@ -819,7 +866,6 @@
 
     render();
 
-    const params = queryParams();
     if (params.get("book") === "1" && params.get("room")) {
       openBookingDialog(params.get("room"), {
         date: params.get("date") || "",
@@ -831,10 +877,16 @@
 
   const renderRoomDetailsPage = () => {
     if (pageName() !== "room-details.html") return;
-    const room = store.roomById(queryParams().get("room")) || store.all("rooms")[0];
+    const params = queryParams();
+    const room = store.roomById(params.get("room")) || store.all("rooms")[0];
+    const selectedDate = isDateValue(params.get("date")) ? params.get("date") : localDateValue();
     if (!room) return;
 
     document.querySelector(".page-title h1").textContent = room.name;
+    const pageDescription = document.querySelector(".page-title .section > p:last-child");
+    if (pageDescription) {
+      pageDescription.textContent = `Availability for ${formatDate(selectedDate)}. Review room facilities and reservation slots before booking.`;
+    }
     const roomImage = document.querySelector(".grid.two .panel img");
     if (roomImage) {
       roomImage.src = imageForRoom(room);
@@ -852,33 +904,29 @@
           <li><span>Recommended use</span><strong>${escapeHTML(room.type)}</strong></li>
         </ul>
         <div class="actions">
-          ${room.status === "available" ? `<a class="button" href="availability.html?room=${encodeURIComponent(room.id)}&book=1">Book This Room</a>` : ""}
-          <a class="button secondary" href="availability.html">Back to Availability</a>
+          ${room.status === "available" ? `<a class="button" href="availability.html?room=${encodeURIComponent(room.id)}&book=1&date=${encodeURIComponent(selectedDate)}">Book This Room</a>` : ""}
+          <a class="button secondary" href="availability.html?date=${encodeURIComponent(selectedDate)}">Back to Availability</a>
         </div>
       `;
     }
 
     const tbody = document.querySelector("tbody");
     if (!tbody) return;
-    const date = "2026-06-10";
-    const slots = [
-      ["09:00", "11:00"],
-      ["10:00", "12:00"],
-      ["13:00", "15:00"],
-      ["15:30", "17:30"],
-    ];
+    const caption = document.querySelector("table caption");
+    if (caption) caption.textContent = `Time slots for ${room.name} on ${formatDate(selectedDate)}`;
+    const slots = generateTimeSlots();
     tbody.innerHTML = slots
       .map(([start, end]) => {
-        const slotStatus = availabilityFor(room, { date, start, end });
+        const slotStatus = slotStatusFor(room, selectedDate, start, end);
         return `
           <tr>
-            <td>${escapeHTML(formatDate(date))}</td>
+            <td>${escapeHTML(formatDate(selectedDate))}</td>
             <td>${escapeHTML(formatTime(start))} - ${escapeHTML(formatTime(end))}</td>
             <td>${statusBadge(slotStatus)}</td>
             <td>${
               slotStatus === "available"
-                ? `<a class="button small" href="availability.html?room=${encodeURIComponent(room.id)}&book=1&date=${date}&start=${start}&end=${end}">Book</a>`
-                : `<a class="button small ghost" href="availability.html">Find Other</a>`
+                ? `<a class="button small" href="availability.html?room=${encodeURIComponent(room.id)}&book=1&date=${encodeURIComponent(selectedDate)}&start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}">Book</a>`
+                : `<a class="button small ghost" href="availability.html?date=${encodeURIComponent(selectedDate)}">Find Other</a>`
             }</td>
           </tr>
         `;
