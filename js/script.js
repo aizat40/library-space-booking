@@ -641,6 +641,8 @@
         ["capacity-low", "Capacity low-high"],
       ],
     });
+    const statusFilter = searchToolbar?.querySelector('[data-control="status"]');
+    if (statusFilter) statusFilter.value = "available";
 
     const filterForm = document.querySelector('form[action="availability.html"]');
     const capacity = byId("capacity");
@@ -683,6 +685,10 @@
     const openBookingDialog = (roomId, defaults = {}) => {
       selectedRoom = store.roomById(roomId);
       if (!selectedRoom || !bookingDialog || !bookingForm) return;
+      if (availabilityFor(selectedRoom, defaults) !== "available") {
+        notify("This room is not currently available for booking.", "conflict");
+        return;
+      }
 
       clearFormErrors(bookingForm);
       bookingForm.reset();
@@ -734,7 +740,11 @@
                   </ul>
                   <div class="actions">
                     <a class="button small" href="room-details.html?room=${encodeURIComponent(room.id)}">View Details</a>
-                    <button class="button small secondary" type="button" data-book-room="${escapeHTML(room.id)}"${room.computedStatus === "closed" ? " disabled" : ""}>Book</button>
+                    ${
+                      room.computedStatus === "available"
+                        ? `<button class="button small secondary" type="button" data-book-room="${escapeHTML(room.id)}">Book</button>`
+                        : ""
+                    }
                   </div>
                 </article>
               `
@@ -841,7 +851,10 @@
           <li><span>Equipment</span><strong>${escapeHTML(room.equipment)}</strong></li>
           <li><span>Recommended use</span><strong>${escapeHTML(room.type)}</strong></li>
         </ul>
-        <div class="actions"><a class="button" href="availability.html?room=${encodeURIComponent(room.id)}&book=1">Book This Room</a><a class="button secondary" href="availability.html">Back to Availability</a></div>
+        <div class="actions">
+          ${room.status === "available" ? `<a class="button" href="availability.html?room=${encodeURIComponent(room.id)}&book=1">Book This Room</a>` : ""}
+          <a class="button secondary" href="availability.html">Back to Availability</a>
+        </div>
       `;
     }
 
@@ -862,7 +875,11 @@
             <td>${escapeHTML(formatDate(date))}</td>
             <td>${escapeHTML(formatTime(start))} - ${escapeHTML(formatTime(end))}</td>
             <td>${statusBadge(slotStatus)}</td>
-            <td><a class="button small ${slotStatus === "conflict" ? "ghost" : ""}" href="availability.html?room=${encodeURIComponent(room.id)}&${slotStatus === "conflict" ? "" : "book=1&"}date=${date}&start=${start}&end=${end}">${slotStatus === "conflict" ? "Find Other" : "Book"}</a></td>
+            <td>${
+              slotStatus === "available"
+                ? `<a class="button small" href="availability.html?room=${encodeURIComponent(room.id)}&book=1&date=${date}&start=${start}&end=${end}">Book</a>`
+                : `<a class="button small ghost" href="availability.html">Find Other</a>`
+            }</td>
           </tr>
         `;
       })
