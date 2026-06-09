@@ -944,6 +944,12 @@ th {
   border-bottom: 1px solid var(--line);
 }
 
+.home-page #home,
+.home-page #about,
+.home-page #features {
+  scroll-margin-top: 94px;
+}
+
 .home-hero::before {
   content: "";
   position: absolute;
@@ -1067,34 +1073,66 @@ th {
 .home-facility-card:hover,
 .featured-space:hover,
 .home-library-info .card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
   border-color: #9fb9c8;
   box-shadow: var(--shadow);
 }
 
 .home-icon {
-  width: 44px;
-  height: 44px;
-  display: inline-grid;
-  place-items: center;
+  width: 56px;
+  height: 56px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 1rem;
-  border-radius: 8px;
-  background: #eaf6fb;
-  color: var(--teal-dark);
-  font-size: 0.82rem;
-  font-weight: 900;
+  border-radius: 16px;
+  background: #e0f2f1;
+  color: #00897b;
+  font-size: 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .home-about-grid .card:nth-child(2) .home-icon,
 .home-facility-card:nth-child(3n + 2) .home-icon {
-  background: var(--yellow-soft);
-  color: #845600;
+  background: #e3f2fd;
+  color: #1976d2;
 }
 
 .home-about-grid .card:nth-child(3) .home-icon,
 .home-facility-card:nth-child(3n) .home-icon {
-  background: var(--red-soft);
-  color: #9b2a2a;
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.home-facility-card:nth-child(6) .home-icon {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.home-facility-card:nth-child(7) .home-icon {
+  background: #fce4ec;
+  color: #c2185b;
+}
+
+.home-library-info .card:nth-child(1) .home-icon {
+  background: #e0f2f1;
+  color: #00897b;
+}
+
+.home-library-info .card:nth-child(2) .home-icon {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.home-library-info .card:nth-child(3) .home-icon {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.home-info-card:hover .home-icon,
+.home-facility-card:hover .home-icon,
+.home-library-info .card:hover .home-icon {
+  transform: scale(1.1);
 }
 
 .home-floor-explorer {
@@ -1368,6 +1406,12 @@ th {
   .home-library-info {
     grid-template-columns: 1fr;
   }
+
+  .home-page #home,
+  .home-page #about,
+  .home-page #features {
+    scroll-margin-top: 140px;
+  }
 }
 
 @media (max-width: 640px) {
@@ -1439,6 +1483,12 @@ th {
   .home-hero {
     min-height: 540px;
     background-position: 55% center;
+  }
+
+  .home-page #home,
+  .home-page #about,
+  .home-page #features {
+    scroll-margin-top: 196px;
   }
 
   .home-hero h1 {

@@ -102,11 +102,18 @@
   };
 
   const publicNavigation = () => ({
-    links: `
-      ${navLink("index.html", "Home", "index.html")}
-      <a class="nav-link" href="index.html#about">About System</a>
-      <a class="nav-link" href="index.html#features">Features</a>
-    `,
+    links:
+      currentPage === "index.html"
+        ? `
+          <a class="nav-link" href="#home">Home</a>
+          <a class="nav-link" href="#about">About System</a>
+          <a class="nav-link" href="#features">Features</a>
+        `
+        : `
+          ${navLink("index.html", "Home", "index.html")}
+          <a class="nav-link" href="index.html#about">About System</a>
+          <a class="nav-link" href="index.html#features">Features</a>
+        `,
     actions: `
       <a class="button small ghost" href="login.html">Login</a>
       <a class="button small" href="register.html">Register</a>
@@ -157,6 +164,93 @@
 
     links.innerHTML = navigationContent.links;
     actions.innerHTML = navigationContent.actions;
+  };
+
+  const initializeHomeScrollSpy = () => {
+    if (currentPage !== "index.html") return;
+
+    const sectionIds = ["home", "about", "features"];
+    const sections = sectionIds.map((id) => document.getElementById(id)).filter(Boolean);
+    const navigationLinks = [...document.querySelectorAll(".nav-links .nav-link")];
+    const sectionLinks = navigationLinks.filter((link) => sectionIds.includes(link.hash.slice(1)));
+    if (!sections.length || !sectionLinks.length) return;
+
+    let pendingTarget = "";
+    let pendingTimer = 0;
+
+    const setActiveLink = (sectionId) => {
+      navigationLinks.forEach((link) => {
+        const isActive = link.hash === `#${sectionId}`;
+        link.classList.toggle("active", isActive);
+        if (isActive) link.setAttribute("aria-current", "location");
+        else link.removeAttribute("aria-current");
+      });
+    };
+
+    const activeSectionAtViewportPosition = () => {
+      const headerHeight = document.querySelector(".site-header")?.offsetHeight || 0;
+      const activationLine = headerHeight + Math.min(180, window.innerHeight * 0.28);
+      return sections.reduce((activeSection, section) => {
+        return section.getBoundingClientRect().top <= activationLine ? section : activeSection;
+      }, sections[0]);
+    };
+
+    const updateFromViewport = () => {
+      if (pendingTarget) {
+        const target = document.getElementById(pendingTarget);
+        const headerHeight = document.querySelector(".site-header")?.offsetHeight || 0;
+        if (target && Math.abs(target.getBoundingClientRect().top - headerHeight) > 48) return;
+        pendingTarget = "";
+        window.clearTimeout(pendingTimer);
+      }
+      setActiveLink(activeSectionAtViewportPosition().id);
+    };
+
+    sectionLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        const sectionId = link.hash.slice(1);
+        pendingTarget = sectionId;
+        setActiveLink(sectionId);
+        window.clearTimeout(pendingTimer);
+        pendingTimer = window.setTimeout(() => {
+          pendingTarget = "";
+          updateFromViewport();
+        }, 900);
+      });
+    });
+
+    const observer = new IntersectionObserver(updateFromViewport, {
+      rootMargin: "-18% 0px -62% 0px",
+      threshold: [0, 0.01, 0.25, 0.5],
+    });
+    sections.forEach((section) => observer.observe(section));
+
+    window.addEventListener("hashchange", () => {
+      const sectionId = window.location.hash.slice(1);
+      if (!sectionIds.includes(sectionId)) return;
+      pendingTarget = sectionId;
+      setActiveLink(sectionId);
+      window.clearTimeout(pendingTimer);
+      pendingTimer = window.setTimeout(() => {
+        pendingTarget = "";
+        updateFromViewport();
+      }, 900);
+    });
+
+    const initialSection = window.location.hash.slice(1);
+    if (sectionIds.includes(initialSection)) {
+      pendingTarget = initialSection;
+      setActiveLink(initialSection);
+      window.requestAnimationFrame(() => {
+        document.getElementById(initialSection)?.scrollIntoView({ block: "start" });
+      });
+      pendingTimer = window.setTimeout(() => {
+        pendingTarget = "";
+        updateFromViewport();
+      }, 900);
+    } else {
+      updateFromViewport();
+    }
   };
 
   const displayAccessMessage = () => {
@@ -213,6 +307,7 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     renderNavigation();
+    initializeHomeScrollSpy();
     initializeLogout();
     initializeAdminLogin();
     displayAccessMessage();
