@@ -940,7 +940,7 @@ th {
   align-items: center;
   isolation: isolate;
   overflow: hidden;
-  background: #17383d url("../images/ptta-library-hero.png") center / cover no-repeat;
+  background: #17383d url("../images/UTHMlibrary.png") center / cover no-repeat;
   border-bottom: 1px solid var(--line);
 }
 
