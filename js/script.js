@@ -834,7 +834,7 @@
       roomSection.innerHTML = rooms.length
         ? rooms
             .map(
-              (room) => {
+              (room, index) => {
                 const openSlot = nextAvailableSlot(room, filters.date);
                 const detailsParameters = new URLSearchParams({
                   room: room.id,
@@ -842,7 +842,7 @@
                   floor: room.floor,
                 });
                 return `
-                <article class="card">
+                <article class="card" data-aos="fade-up" data-aos-delay="${((index % 3) + 1) * 100}">
                   <div class="room-image"><img src="${escapeHTML(imageForRoom(room))}" alt="PTTA Level ${escapeHTML(room.floor)} floor plan for ${escapeHTML(room.name)}"></div>
                   ${statusBadge("available")}
                   <h2>${escapeHTML(room.name)}</h2>
@@ -860,6 +860,8 @@
             )
             .join("")
         : emptyState(`No rooms on Level ${filters.floor} have an available time slot for ${formatDate(filters.date)}.`);
+
+      window.PTTAAOS?.refresh();
     };
 
     filterForm?.addEventListener("submit", (event) => {
@@ -1856,8 +1858,71 @@
     `;
   };
 
+  const initHomeCounters = () => {
+    const statistics = document.querySelector(".home-stat-band");
+    const counters = all(".counter[data-target]", statistics || document);
+    if (!statistics || !counters.length) return;
+
+    const duration = 1250;
+    let hasRun = false;
+
+    const setFinalValues = () => {
+      counters.forEach((counter) => {
+        counter.textContent = String(Number(counter.dataset.target) || 0);
+      });
+      statistics.classList.add("counter-started");
+    };
+
+    const startCounting = () => {
+      if (hasRun) return;
+      hasRun = true;
+      statistics.classList.add("counter-started");
+
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        setFinalValues();
+        return;
+      }
+
+      const startedAt = performance.now();
+      const update = (currentTime) => {
+        const progress = Math.min((currentTime - startedAt) / duration, 1);
+        const easedProgress = 1 - Math.pow(1 - progress, 3);
+
+        counters.forEach((counter) => {
+          const target = Number(counter.dataset.target) || 0;
+          counter.textContent = String(Math.min(target, Math.floor(target * easedProgress)));
+        });
+
+        if (progress < 1) {
+          window.requestAnimationFrame(update);
+        } else {
+          setFinalValues();
+        }
+      };
+
+      window.requestAnimationFrame(update);
+    };
+
+    if (!("IntersectionObserver" in window)) {
+      startCounting();
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+        startCounting();
+      },
+      { threshold: 0.25 }
+    );
+
+    observer.observe(statistics);
+  };
+
   document.addEventListener("DOMContentLoaded", () => {
     initFloorPlanTabs();
+    initHomeCounters();
     renderAvailabilityPage();
     renderRoomDetailsPage();
     initConfirmationPage();

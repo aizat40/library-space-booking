@@ -6,6 +6,7 @@
   <title>PTTA Library Space Booking System | UTHM</title>
   <link rel="icon" type="image/png" href="images/UTHM.png" sizes="32x32">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
   <link rel="stylesheet" href="css/style.css">
   <script src="js/auth.js"></script>
 </head>
@@ -26,7 +27,7 @@
   </header>
 
   <main id="main">
-    <section id="home" class="home-hero" aria-labelledby="home-title">
+    <section id="home" class="home-hero" aria-labelledby="home-title" data-aos="fade-up">
       <div class="section home-hero-content">
         <p class="eyebrow">Universiti Tun Hussein Onn Malaysia</p>
         <h1 id="home-title">PTTA Library Space Booking System</h1>
@@ -40,14 +41,19 @@
 
     <section class="home-stat-band" aria-label="PTTA booking system statistics">
       <div class="section home-stats">
-        <article><strong>4</strong><span>Library levels</span></article>
-        <article><strong>23</strong><span>Bookable learning spaces</span></article>
-        <article><strong>24/7</strong><span>Online booking access</span></article>
-        <article><strong>Daily</strong><span>Student learning activity</span></article>
+        <article class="stat-card" data-aos="zoom-in"><strong class="counter" data-target="4">0</strong><span>Library levels</span></article>
+        <article class="stat-card" data-aos="zoom-in" data-aos-delay="100"><strong class="counter" data-target="23">0</strong><span>Bookable learning spaces</span></article>
+        <article class="stat-card" data-aos="zoom-in" data-aos-delay="200">
+          <strong class="counter-group" aria-label="24 hours a day, 7 days a week">
+            <span class="counter" data-target="24" aria-hidden="true">0</span><span class="counter-suffix" aria-hidden="true">/7</span>
+          </strong>
+          <span>Online booking access</span>
+        </article>
+        <article data-aos="zoom-in" data-aos-delay="300"><strong>Daily</strong><span>Student learning activity</span></article>
       </div>
     </section>
 
-    <section id="about" class="home-band home-band-light">
+    <section id="about" class="home-band home-band-light" data-aos="fade-up">
       <div class="section">
         <div class="section-heading">
           <p class="eyebrow">About PTTA</p>
@@ -81,7 +87,7 @@
           <h2>Explore PTTA by Level</h2>
           <p>Use the official PTTA floor plans to find rooms, collections, services, and learning facilities before making a booking.</p>
         </div>
-        <div class="home-floor-explorer" data-floor-plans>
+        <div class="home-floor-explorer" data-floor-plans data-aos="fade-right">
           <div class="home-floor-visual">
             <div class="floor-tabs" role="tablist" aria-label="PTTA floor levels">
               <button class="floor-tab active" type="button" role="tab" aria-selected="true" data-floor-tab="1">Level 1</button>
@@ -124,13 +130,13 @@
           <p>From focused reading to large academic events, PTTA provides facilities for individual, collaborative, creative, and technology-supported work.</p>
         </div>
         <div class="home-facility-grid">
-          <article class="card home-facility-card"><span class="home-icon"><i class="fas fa-comments"></i></span><h3>Discussion Rooms</h3><p>Hikmah Room, Lestari Room 1, Lestari Room 2, Al-Shirazi Scholar Room, and Iqra' Room.</p></article>
-          <article class="card home-facility-card"><span class="home-icon"><i class="fas fa-book"></i></span><h3>Reading Areas</h3><p>Quiet reading spaces across Levels 2, 3, and 4, including the 24 Hours Reading Room.</p></article>
-          <article class="card home-facility-card"><span class="home-icon"><i class="fas fa-chalkboard-user"></i></span><h3>Auditorium</h3><p>Al-Jazari Auditorium supports briefings, presentations, academic talks, and university events.</p></article>
-          <article class="card home-facility-card"><span class="home-icon"><i class="fas fa-display"></i></span><h3>Multimedia Room</h3><p>A technology-supported Level 1 space for multimedia learning and presentations.</p></article>
-          <article class="card home-facility-card"><span class="home-icon"><i class="fas fa-screwdriver-wrench"></i></span><h3>MakerSpace</h3><p>MakerSpace UTHM supports prototyping, practical projects, innovation, and collaborative making.</p></article>
-          <article class="card home-facility-card"><span class="home-icon"><i class="fas fa-folder-open"></i></span><h3>Open Access Collections</h3><p>Open Access Collections on Levels 2, 3, and 4 provide convenient browsing and study access.</p></article>
-          <article class="card home-facility-card"><span class="home-icon"><i class="fas fa-lightbulb"></i></span><h3>Creative Learning Spaces</h3><p>Edu Entertainment, Eksplorasi Room, Sister Zone, and Bibliotherapy Corner support active learning.</p></article>
+          <article class="card home-facility-card" data-aos="zoom-in-up"><span class="home-icon"><i class="fas fa-comments"></i></span><h3>Discussion Rooms</h3><p>Hikmah Room, Lestari Room 1, Lestari Room 2, Al-Shirazi Scholar Room, and Iqra' Room.</p></article>
+          <article class="card home-facility-card" data-aos="zoom-in-up" data-aos-delay="100"><span class="home-icon"><i class="fas fa-book"></i></span><h3>Reading Areas</h3><p>Quiet reading spaces across Levels 2, 3, and 4, including the 24 Hours Reading Room.</p></article>
+          <article class="card home-facility-card" data-aos="zoom-in-up" data-aos-delay="200"><span class="home-icon"><i class="fas fa-chalkboard-user"></i></span><h3>Auditorium</h3><p>Al-Jazari Auditorium supports briefings, presentations, academic talks, and university events.</p></article>
+          <article class="card home-facility-card" data-aos="zoom-in-up"><span class="home-icon"><i class="fas fa-display"></i></span><h3>Multimedia Room</h3><p>A technology-supported Level 1 space for multimedia learning and presentations.</p></article>
+          <article class="card home-facility-card" data-aos="zoom-in-up" data-aos-delay="100"><span class="home-icon"><i class="fas fa-screwdriver-wrench"></i></span><h3>MakerSpace</h3><p>MakerSpace UTHM supports prototyping, practical projects, innovation, and collaborative making.</p></article>
+          <article class="card home-facility-card" data-aos="zoom-in-up" data-aos-delay="200"><span class="home-icon"><i class="fas fa-folder-open"></i></span><h3>Open Access Collections</h3><p>Open Access Collections on Levels 2, 3, and 4 provide convenient browsing and study access.</p></article>
+          <article class="card home-facility-card" data-aos="zoom-in-up"><span class="home-icon"><i class="fas fa-lightbulb"></i></span><h3>Creative Learning Spaces</h3><p>Edu Entertainment, Eksplorasi Room, Sister Zone, and Bibliotherapy Corner support active learning.</p></article>
         </div>
       </div>
     </section>
@@ -142,7 +148,7 @@
           <h2>How Booking Works</h2>
           <p>The booking path is designed for quick decisions and clear confirmation.</p>
         </div>
-        <ol class="home-steps">
+        <ol class="home-steps" data-aos="fade-left">
           <li><span>01</span><div><h3>Login using UTHM account</h3><p>Access the portal with your registered university identity.</p></div></li>
           <li><span>02</span><div><h3>Select date and floor</h3><p>Choose when you need the space and which PTTA level to explore.</p></div></li>
           <li><span>03</span><div><h3>View available spaces</h3><p>Only rooms with at least one available time slot are displayed.</p></div></li>
@@ -215,5 +221,7 @@
     </div>
   </footer>
   <script src="js/script.js" defer></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script src="js/aos-init.js" defer></script>
 </body>
 </html>

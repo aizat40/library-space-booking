@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Library Space Booking System | Room Availability</title>
   <link rel="icon" type="image/png" href="images/UTHM.png" sizes="32x32">
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
   <link rel="stylesheet" href="css/style.css">
   <script src="js/auth.js"></script>
 </head>
@@ -32,7 +33,7 @@
       </div>
     </section>
     <section class="section floor-layout">
-      <article class="panel floor-map floor-plan-panel" data-floor-plans>
+      <article class="panel floor-map floor-plan-panel" data-floor-plans data-aos="fade-right">
         <p class="eyebrow">Floor Plan</p>
         <h2>Explore PTTA by level</h2>
         <div class="floor-tabs" role="tablist" aria-label="PTTA floor levels">
@@ -46,7 +47,7 @@
         </div>
         <p class="helper-text floor-plan-caption" data-floor-plan-caption>Level 1: visitor services, lounges, multimedia facilities, the 24 Hours Reading Room, and MakerSpace UTHM.</p>
       </article>
-      <aside class="form-panel">
+      <aside class="form-panel" data-aos="fade-left">
         <h2>Search spaces</h2>
         <form action="availability.html" method="get">
           <label for="date">Date
@@ -107,5 +108,7 @@
     </div>
   </footer>
   <script src="js/script.js" defer></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script src="js/aos-init.js" defer></script>
 </body>
 </html>
