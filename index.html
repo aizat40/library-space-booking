@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Library Space Booking System | Home</title>
+  <title>PTTA Library Space Booking System | UTHM</title>
   <link rel="icon" type="image/png" href="images/UTHM.png" sizes="32x32">
   <link rel="stylesheet" href="css/style.css">
   <script src="js/auth.js"></script>
 </head>
-<body>
+<body class="home-page">
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <nav class="nav-shell" aria-label="Primary navigation">
@@ -25,62 +25,188 @@
   </header>
 
   <main id="main">
-    <section class="hero">
-      <div class="section hero-grid">
-        <div>
-          <p class="eyebrow">UTHM Library Space Booking</p>
-          <h1>Reserve discussion rooms and learning spaces online.</h1>
-          <p>The system gives students real-time access to room availability, booking details, reminders, and reservation history for Tunku Tun Aminah Library.</p>
-          <div class="hero-actions">
-            <a class="button" href="login.html">Login</a>
-            <a class="button secondary" href="register.html">Register</a>
-          </div>
-        </div>
-        <div class="hero-media">
-          <img src="images/library-illustration.svg" alt="Library building with reservation status panels">
+    <section class="home-hero" aria-labelledby="home-title">
+      <div class="section home-hero-content">
+        <p class="eyebrow">Universiti Tun Hussein Onn Malaysia</p>
+        <h1 id="home-title">PTTA Library Space Booking System</h1>
+        <p>Reserve rooms, learning spaces, and collaborative facilities at Tunku Tun Aminah Library online. Check availability, choose a time slot, and manage your bookings from one UTHM portal.</p>
+        <div class="hero-actions">
+          <a class="button" href="login.html">Login</a>
+          <a class="button secondary" href="availability.html">Check Availability</a>
         </div>
       </div>
     </section>
 
-    <section id="features" class="section grid three" aria-label="System highlights">
-      <article class="card">
-        <span class="feature-icon" aria-hidden="true">01</span>
-        <h2>Real-time room view</h2>
-        <p>Students can compare discussion zones, quiet learning spaces, room capacity, and booking status before submitting a request.</p>
-      </article>
-      <article class="card">
-        <span class="feature-icon" aria-hidden="true">02</span>
-        <h2>Booking management</h2>
-        <p>Upcoming reservations, past history, edit options, and cancellation flow are grouped inside the student dashboard.</p>
-      </article>
-      <article class="card">
-        <span class="feature-icon" aria-hidden="true">03</span>
-        <h2>Admin oversight</h2>
-        <p>Library staff can review transactions, track room usage, configure rooms, manage users, and prepare usage reports.</p>
-      </article>
+    <section class="home-stat-band" aria-label="PTTA booking system statistics">
+      <div class="section home-stats">
+        <article><strong>4</strong><span>Library levels</span></article>
+        <article><strong>23</strong><span>Bookable learning spaces</span></article>
+        <article><strong>24/7</strong><span>Online booking access</span></article>
+        <article><strong>Daily</strong><span>Student learning activity</span></article>
+      </div>
     </section>
 
-    <section id="about" class="section floor-layout">
-      <article class="panel floor-map">
-        <p class="eyebrow">Floor Plan</p>
-        <h2>Space availability at a glance</h2>
-        <img src="images/floor-plan.svg" alt="Simplified library floor plan with status colors for rooms">
-        <div class="legend" aria-label="Availability legend">
-          <span><i class="dot green"></i>Available</span>
-          <span><i class="dot yellow"></i>Pending</span>
-          <span><i class="dot red"></i>Conflict</span>
+    <section id="about" class="home-band home-band-light">
+      <div class="section">
+        <div class="section-heading">
+          <p class="eyebrow">About PTTA</p>
+          <h2>A dynamic knowledge gateway for the UTHM community</h2>
+          <p>Tunku Tun Aminah Library supports teaching, learning, research, innovation, and student activities through accessible collections, technology-enabled rooms, quiet study areas, and collaborative spaces.</p>
         </div>
-      </article>
-      <article class="panel">
-        <p class="eyebrow">Location</p>
-        <h2>Tunku Tun Aminah Library, UTHM</h2>
-        <div class="map-placeholder" role="img" aria-label="Map placeholder showing the library location">
-          <span class="map-pin" aria-hidden="true">L</span>
+        <div class="grid three home-about-grid">
+          <article class="card home-info-card">
+            <span class="home-icon" aria-hidden="true">L</span>
+            <h3>Teaching and Learning</h3>
+            <p>Flexible rooms and reading environments support coursework, group discussion, presentations, and independent study.</p>
+          </article>
+          <article class="card home-info-card">
+            <span class="home-icon" aria-hidden="true">R</span>
+            <h3>Research and Knowledge</h3>
+            <p>Reference collections, open access materials, scholar rooms, and information-searching facilities help users explore knowledge.</p>
+          </article>
+          <article class="card home-info-card">
+            <span class="home-icon" aria-hidden="true">C</span>
+            <h3>Student Community</h3>
+            <p>Lounges, creative spaces, exhibitions, and extended-hour reading areas make PTTA an active part of campus life.</p>
+          </article>
         </div>
-        <p>The homepage includes a visual location reference so users can connect the booking system with the physical library spaces.</p>
-      </article>
+      </div>
+    </section>
+
+    <section class="home-band">
+      <div class="section home-floor-section">
+        <div class="section-heading">
+          <p class="eyebrow">Floor Directory</p>
+          <h2>Explore PTTA by Level</h2>
+          <p>Use the official PTTA floor plans to find rooms, collections, services, and learning facilities before making a booking.</p>
+        </div>
+        <div class="home-floor-explorer" data-floor-plans>
+          <div class="home-floor-visual">
+            <div class="floor-tabs" role="tablist" aria-label="PTTA floor levels">
+              <button class="floor-tab active" type="button" role="tab" aria-selected="true" data-floor-tab="1">Level 1</button>
+              <button class="floor-tab" type="button" role="tab" aria-selected="false" tabindex="-1" data-floor-tab="2">Level 2</button>
+              <button class="floor-tab" type="button" role="tab" aria-selected="false" tabindex="-1" data-floor-tab="3">Level 3</button>
+              <button class="floor-tab" type="button" role="tab" aria-selected="false" tabindex="-1" data-floor-tab="4">Level 4</button>
+            </div>
+            <div class="floor-plan-stage" role="tabpanel">
+              <img src="images/floor-plan-level-1.png" alt="PTTA UTHM Level 1 floor plan" data-floor-plan-image>
+            </div>
+          </div>
+          <div class="home-floor-directory" aria-live="polite">
+            <p class="eyebrow" data-floor-label>Level 1 Facilities</p>
+            <h3 data-floor-title>Visitor services, learning, and extended-hours spaces</h3>
+            <p data-floor-plan-caption>Level 1 brings together the main visitor services, lounges, multimedia facilities, the 24 Hours Reading Room, and MakerSpace UTHM.</p>
+            <ul class="home-facility-list" data-floor-facilities>
+              <li>Gallery</li>
+              <li>Circulation Counter</li>
+              <li>AATA Lounge</li>
+              <li>Special User Area</li>
+              <li>Closed Reference Room</li>
+              <li>Multimedia Room</li>
+              <li>International Office</li>
+              <li>PPS Lounge</li>
+              <li>Go Book Coffee Corner</li>
+              <li>24 Hours Reading Room</li>
+              <li>MakerSpace UTHM</li>
+            </ul>
+            <a class="button" href="availability.html?floor=1" data-floor-availability>Check Level 1 Availability</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="home-band home-band-light">
+      <div class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Facilities and Spaces</p>
+          <h2>Spaces designed for different ways of learning</h2>
+          <p>From focused reading to large academic events, PTTA provides facilities for individual, collaborative, creative, and technology-supported work.</p>
+        </div>
+        <div class="home-facility-grid">
+          <article class="card home-facility-card"><span class="home-icon" aria-hidden="true">DR</span><h3>Discussion Rooms</h3><p>Hikmah Room, Lestari Room 1, Lestari Room 2, Al-Shirazi Scholar Room, and Iqra' Room.</p></article>
+          <article class="card home-facility-card"><span class="home-icon" aria-hidden="true">RA</span><h3>Reading Areas</h3><p>Quiet reading spaces across Levels 2, 3, and 4, including the 24 Hours Reading Room.</p></article>
+          <article class="card home-facility-card"><span class="home-icon" aria-hidden="true">AU</span><h3>Auditorium</h3><p>Al-Jazari Auditorium supports briefings, presentations, academic talks, and university events.</p></article>
+          <article class="card home-facility-card"><span class="home-icon" aria-hidden="true">MM</span><h3>Multimedia Room</h3><p>A technology-supported Level 1 space for multimedia learning and presentations.</p></article>
+          <article class="card home-facility-card"><span class="home-icon" aria-hidden="true">MS</span><h3>MakerSpace</h3><p>MakerSpace UTHM supports prototyping, practical projects, innovation, and collaborative making.</p></article>
+          <article class="card home-facility-card"><span class="home-icon" aria-hidden="true">OA</span><h3>Open Access Collections</h3><p>Open Access Collections on Levels 2, 3, and 4 provide convenient browsing and study access.</p></article>
+          <article class="card home-facility-card"><span class="home-icon" aria-hidden="true">CL</span><h3>Creative Learning Spaces</h3><p>Edu Entertainment, Eksplorasi Room, Sister Zone, and Bibliotherapy Corner support active learning.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="home-band">
+      <div class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Simple Booking</p>
+          <h2>How Booking Works</h2>
+          <p>The booking path is designed for quick decisions and clear confirmation.</p>
+        </div>
+        <ol class="home-steps">
+          <li><span>01</span><div><h3>Login using UTHM account</h3><p>Access the portal with your registered university identity.</p></div></li>
+          <li><span>02</span><div><h3>Select date and floor</h3><p>Choose when you need the space and which PTTA level to explore.</p></div></li>
+          <li><span>03</span><div><h3>View available spaces</h3><p>Only rooms with at least one available time slot are displayed.</p></div></li>
+          <li><span>04</span><div><h3>Choose available time slot</h3><p>Open room details and select an available slot for the chosen date.</p></div></li>
+          <li><span>05</span><div><h3>Confirm booking</h3><p>Enter the participant count and confirm the selected reservation.</p></div></li>
+          <li><span>06</span><div><h3>Manage from dashboard</h3><p>Review upcoming reservations, history, edits, cancellations, and notices.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="home-band home-band-light">
+      <div class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Featured Spaces</p>
+          <h2>Popular PTTA rooms for study and collaboration</h2>
+          <p>Explore frequently requested spaces and continue to their current availability.</p>
+        </div>
+        <div class="grid three home-featured-grid">
+          <article class="card featured-space"><img src="images/floor-plan-level-2.png" alt="PTTA Level 2 floor plan for Hikmah Room"><div><span class="pill info">Level 2</span><h3>Hikmah Room</h3><p>Enclosed collaborative room for meetings, discussions, and learning activities.</p><a href="room-details.html?room=l2-hikmah-room&amp;floor=2">View space</a></div></article>
+          <article class="card featured-space"><img src="images/floor-plan-level-3.png" alt="PTTA Level 3 floor plan for Al-Jazari Auditorium"><div><span class="pill info">Level 3</span><h3>Al-Jazari Auditorium</h3><p>Large presentation and event venue with stage, projection, audio, and fixed seating.</p><a href="room-details.html?room=l3-al-jazari-auditorium&amp;floor=3">View space</a></div></article>
+          <article class="card featured-space"><img src="images/floor-plan-level-3.png" alt="PTTA Level 3 floor plan for Lestari Room 1"><div><span class="pill info">Level 3</span><h3>Lestari Room 1</h3><p>Bookable discussion room for small-group learning, meetings, and presentations.</p><a href="room-details.html?room=l3-lestari-room-1&amp;floor=3">View space</a></div></article>
+          <article class="card featured-space"><img src="images/floor-plan-level-3.png" alt="PTTA Level 3 floor plan for Lestari Room 2"><div><span class="pill info">Level 3</span><h3>Lestari Room 2</h3><p>A focused discussion room with display, whiteboard, and meeting table.</p><a href="room-details.html?room=l3-lestari-room-2&amp;floor=3">View space</a></div></article>
+          <article class="card featured-space"><img src="images/floor-plan-level-1.png" alt="PTTA Level 1 floor plan for Multimedia Room"><div><span class="pill info">Level 1</span><h3>Multimedia Room</h3><p>Technology-supported room for multimedia learning, group work, and presentations.</p><a href="room-details.html?room=l1-multimedia-room&amp;floor=1">View space</a></div></article>
+          <article class="card featured-space"><img src="images/floor-plan-level-4.png" alt="PTTA Level 4 floor plan for Iqra' Room"><div><span class="pill info">Level 4</span><h3>Iqra' Room</h3><p>Bookable room for group reading, academic discussion, and collaborative activities.</p><a href="room-details.html?room=l4-iqra-room&amp;floor=4">View space</a></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="home-band">
+      <div class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Library Information</p>
+          <h2>Plan your visit to PTTA</h2>
+          <p>Service information for Tunku Tun Aminah Library at the UTHM Parit Raja campus.</p>
+        </div>
+        <div class="home-library-info">
+          <article class="card">
+            <span class="home-icon" aria-hidden="true">OH</span>
+            <h3>Operating Hours</h3>
+            <ul class="home-plain-list">
+              <li><strong>Monday - Thursday</strong><span>8:00 AM - 9:30 PM</span></li>
+              <li><strong>Friday</strong><span>8:00 AM - 12:15 PM<br>2:45 PM - 9:30 PM</span></li>
+              <li><strong>Weekend and public holidays</strong><span>Closed</span></li>
+            </ul>
+          </article>
+          <article class="card">
+            <span class="home-icon" aria-hidden="true">CT</span>
+            <h3>Contact Information</h3>
+            <ul class="home-plain-list">
+              <li><strong>Circulation Counter</strong><a href="tel:+6074533318">+607-4533318</a></li>
+              <li><strong>Reference Desk</strong><a href="tel:+6074533319">+607-4533319</a></li>
+              <li><strong>WhatsApp</strong><a href="tel:+6074533318">+607-4533318</a></li>
+            </ul>
+          </article>
+          <article class="card home-location-card">
+            <span class="home-icon" aria-hidden="true">PT</span>
+            <h3>PTTA Location</h3>
+            <p>Tunku Tun Aminah Library<br>Universiti Tun Hussein Onn Malaysia<br>86400 Parit Raja, Batu Pahat<br>Johor, Malaysia</p>
+            <a class="button secondary" href="https://maps.google.com/?q=Tunku+Tun+Aminah+Library+UTHM" target="_blank" rel="noopener">Open Map</a>
+          </article>
+        </div>
+      </div>
     </section>
   </main>
+
   <footer class="site-footer">
     <div class="footer-shell">
       <span>&copy; 2026 Tunku Tun Aminah Library, UTHM.</span>
@@ -90,5 +216,3 @@
   <script src="js/script.js" defer></script>
 </body>
 </html>
-
-

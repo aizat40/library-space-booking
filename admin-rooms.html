@@ -28,11 +28,11 @@
     <section class="section grid two">
       <article class="table-wrap">
         <table>
-          <thead><tr><th>Room</th><th>Type</th><th>Capacity</th><th>Status</th></tr></thead>
+          <thead><tr><th>Room</th><th>Floor</th><th>Type</th><th>Capacity</th><th>Status</th></tr></thead>
           <tbody>
-            <tr><td>A-204</td><td>Discussion</td><td>8</td><td><span class="status available">Available</span></td></tr>
-            <tr><td>B-112</td><td>Learning Space</td><td>6</td><td><span class="status pending">Pending</span></td></tr>
-            <tr><td>C-301</td><td>Media Room</td><td>10</td><td><span class="status conflict">Conflict</span></td></tr>
+            <tr><td>Lestari Room 1</td><td>Level 3</td><td>Discussion Room</td><td>12</td><td><span class="status available">Available</span></td></tr>
+            <tr><td>Hikmah Room</td><td>Level 2</td><td>Discussion Room</td><td>20</td><td><span class="status available">Available</span></td></tr>
+            <tr><td>Multimedia Room</td><td>Level 1</td><td>Multimedia</td><td>24</td><td><span class="status available">Available</span></td></tr>
           </tbody>
         </table>
       </article>
@@ -41,7 +41,7 @@
         <form action="admin-rooms.html" method="get">
           <label for="room-code">Room code<input id="room-code" name="room-code" type="text"></label>
           <div class="form-grid"><label for="room-type">Type<input id="room-type" name="room-type" type="text"></label><label for="room-capacity">Capacity<input id="room-capacity" name="room-capacity" type="number" min="1"></label></div>
-          <label for="room-status">Status<select id="room-status" name="room-status"><option>Available</option><option>Pending</option><option>Conflict</option><option>Closed</option></select></label>
+          <label for="room-status">Status<select id="room-status" name="room-status"><option>Available</option><option>Closed</option></select></label>
           <button class="button" type="submit">Save Room</button>
         </form>
       </article>
@@ -56,6 +56,4 @@
   <script src="js/script.js" defer></script>
 </body>
 </html>
-
-
 

@@ -10,8 +10,8 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const parameters = new URLSearchParams(window.location.search);
-      parameters.set("book", "1");
-      window.location.replace(`availability.html?${parameters.toString()}`);
+      const query = parameters.toString();
+      window.location.replace(`availability.html${query ? `?${query}` : ""}`);
     });
   </script>
 </head>
@@ -35,7 +35,7 @@
       <div class="section">
         <p class="eyebrow">Booking</p>
         <h1>Opening room availability</h1>
-        <p>Room bookings are now completed directly from the availability page.</p>
+        <p>Select a date and floor, open a room's details, then choose an available time slot.</p>
         <a class="button" href="availability.html">Continue to Availability</a>
       </div>
     </section>

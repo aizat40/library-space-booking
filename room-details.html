@@ -27,33 +27,68 @@
     <section class="page-title">
       <div class="section">
         <p class="eyebrow">Room Details</p>
-        <h1>Discussion Room A-204</h1>
+        <h1>Lestari Room 1</h1>
         <p>Loading availability for the selected date.</p>
       </div>
     </section>
     <section class="section grid two">
-      <article class="panel">
-        <img src="images/room-discussion.svg" alt="Discussion room preview with table and display">
+      <article class="panel room-detail-visual">
+        <img src="images/floor-plan-level-3.png" alt="PTTA UTHM Level 3 floor plan showing Lestari Room 1">
       </article>
       <article class="panel">
         <span class="status available">Available</span>
         <h2>Room information</h2>
         <ul class="detail-list">
-          <li><span>Zone</span><strong>Discussion Zone A</strong></li>
-          <li><span>Capacity</span><strong>8 users</strong></li>
-          <li><span>Equipment</span><strong>Display, whiteboard, power outlets</strong></li>
-          <li><span>Recommended use</span><strong>Group discussion and presentation practice</strong></li>
+          <li><span>Room name</span><strong>Lestari Room 1</strong></li>
+          <li><span>Floor level</span><strong>Level 3</strong></li>
+          <li><span>Description</span><strong>Bookable discussion room for small-group learning and meetings.</strong></li>
+          <li><span>Capacity</span><strong>12 users</strong></li>
+          <li><span>Availability</span><strong>Available</strong></li>
         </ul>
-        <div class="actions"><a class="button" href="availability.html?room=room-a204&amp;book=1">Book This Room</a><a class="button secondary" href="availability.html">Back to Availability</a></div>
+        <div class="actions"><a class="button secondary" href="availability.html">Back to Availability</a></div>
       </article>
     </section>
+
+    <dialog id="booking-dialog" class="booking-dialog" aria-labelledby="booking-dialog-title">
+      <div class="booking-dialog-content">
+        <div class="booking-dialog-header">
+          <div>
+            <p class="eyebrow">Room Reservation</p>
+            <h2 id="booking-dialog-title">Confirm selected slot</h2>
+          </div>
+          <button class="dialog-close" type="button" data-close-booking aria-label="Close booking form" title="Close">&times;</button>
+        </div>
+
+        <div id="booking-success" class="alert confirmed" role="status" hidden></div>
+
+        <form id="room-details-booking-form" novalidate>
+          <input id="booking-room" name="room" type="hidden">
+          <input id="booking-date" name="booking-date" type="hidden">
+          <input id="start-time" name="start-time" type="hidden">
+          <input id="end-time" name="end-time" type="hidden">
+          <ul class="detail-list booking-room-summary">
+            <li><span>Room</span><strong id="selected-room-name">Not selected</strong></li>
+            <li><span>Date</span><strong id="selected-booking-date">Not selected</strong></li>
+            <li><span>Time</span><strong id="selected-booking-time">Not selected</strong></li>
+            <li><span>Capacity</span><strong id="selected-room-capacity">Not selected</strong></li>
+          </ul>
+          <label for="participants">Number of participants
+            <input id="participants" name="participants" type="number" min="1" required>
+          </label>
+          <div class="actions">
+            <button class="button" type="submit">Confirm Booking</button>
+            <button class="button secondary" type="button" data-close-booking>Cancel</button>
+          </div>
+        </form>
+      </div>
+    </dialog>
     <section class="section grid two compact">
-      <article class="table-wrap" aria-label="Time slots for selected date">
+      <article class="table-wrap slot-table-wrap" aria-label="Time slots for selected date">
         <table>
           <caption class="helper-text">Loading room availability</caption>
-          <thead><tr><th>Date</th><th>Time</th><th>Status</th><th>Action</th></tr></thead>
+          <thead><tr><th>Time</th><th>Status</th><th>Action</th></tr></thead>
           <tbody>
-            <tr><td colspan="4">Loading availability...</td></tr>
+            <tr><td colspan="3">Loading availability...</td></tr>
           </tbody>
         </table>
       </article>

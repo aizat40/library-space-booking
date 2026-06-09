@@ -90,7 +90,11 @@ library-space-booking/
   css/
     style.css
   images/
-    floor-plan.svg
+    floor-plan-level-1.png
+    floor-plan-level-2.png
+    floor-plan-level-3.png
+    floor-plan-level-4.png
+    ptta-library-hero.png
     library-illustration.svg
     room-discussion.svg
     room-study.svg
@@ -110,7 +114,7 @@ library-space-booking/
 - System purpose and location: `index.html`.
 - Room availability and floor plan: `availability.html`.
 - Room details: `room-details.html`.
-- Reservation creation: `booking.html`.
+- Reservation creation: `availability.html` to `room-details.html`, where the user selects an available slot.
 - Booking confirmation and notification: `confirmation.html`.
 - User dashboard, history, notifications, booking management: `dashboard.html`, `history.html`, `notifications.html`, `manage-bookings.html`, `edit-booking.html`, `cancel-booking.html`.
 - Admin management: `admin.html`, `admin-rooms.html`, `admin-bookings.html`, `admin-users.html`, `reports.html`.

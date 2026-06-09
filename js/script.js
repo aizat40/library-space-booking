@@ -1,7 +1,8 @@
 (() => {
   "use strict";
 
-  const STORAGE_KEY = "tta-library-booking-state-v1";
+  const STORAGE_KEY = "tta-library-booking-state-v3";
+  const LEGACY_STORAGE_KEYS = ["tta-library-booking-state-v2", "tta-library-booking-state-v1"];
   const SESSION_KEY = "tta-library-booking-session-v1";
 
   const today = () => {
@@ -118,49 +119,91 @@
     return next;
   };
 
+  const createRoom = (floor, code, id, name, type, capacity, status, description, equipment) => ({
+    id,
+    code,
+    name,
+    floor,
+    zone: `Level ${floor}`,
+    type,
+    capacity,
+    status: status === "available" ? "available" : "closed",
+    description,
+    equipment,
+  });
+
+  const PTTA_ROOMS = [
+    createRoom(1, "L1-GAL", "l1-gallery", "Gallery", "Gallery", 40, "available", "Flexible exhibition and event space near the Level 1 entrance.", "Display panels, flexible seating"),
+    createRoom(1, "L1-CC", "l1-circulation-counter", "Circulation Counter", "Library Service", 12, "closed", "Main counter for borrowing, returns, membership, and library assistance.", "Service counters, self-check facilities"),
+    createRoom(1, "L1-AATA", "l1-aata-lounge", "AATA Lounge", "Lounge", 12, "available", "Informal lounge for small discussions and collaborative study.", "Lounge seating, power outlets"),
+    createRoom(1, "L1-SUA", "l1-special-user-area", "Special User Area", "Accessible Study", 8, "available", "Accessible study area reserved for users who need additional support.", "Accessible desks, power outlets"),
+    createRoom(1, "L1-CRR", "l1-closed-reference-room", "Closed Reference Room", "Reference Collection", 20, "closed", "Controlled-access reference collection managed by library staff.", "Reference shelving, consultation desk"),
+    createRoom(1, "L1-MMR", "l1-multimedia-room", "Multimedia Room", "Multimedia", 24, "available", "Technology-supported room for multimedia learning and presentations.", "Display, audio system, computers"),
+    createRoom(1, "L1-IO", "l1-international-office", "International Office", "Office", 10, "closed", "Administrative office supporting international library users and activities.", "Office workstations, consultation seating"),
+    createRoom(1, "L1-PPS", "l1-pps-lounge", "PPS Lounge", "Lounge", 20, "available", "Comfortable postgraduate lounge for focused work and informal meetings.", "Lounge seating, tables, power outlets"),
+    createRoom(1, "L1-GBCC", "l1-go-book-coffee-corner", "Go Book Coffee Corner", "Cafe", 24, "closed", "Refreshment corner with casual seating for library visitors.", "Cafe seating, service counter"),
+    createRoom(1, "L1-24HR", "l1-24-hours-reading-room", "24 Hours Reading Room", "Reading Room", 80, "available", "Extended-hours reading room for individual and group study.", "Study desks, power outlets, Wi-Fi"),
+    createRoom(1, "L1-MSU", "l1-makerspace-uthm", "MakerSpace UTHM", "Makerspace", 30, "available", "Hands-on innovation space for prototyping, making, and collaborative projects.", "Maker tables, presentation display, project equipment"),
+
+    createRoom(2, "L2-SP", "l2-showcase-ptta", "Showcase PTTA", "Exhibition", 30, "closed", "Showcase area highlighting PTTA services, projects, and achievements.", "Display cases, exhibition panels"),
+    createRoom(2, "L2-RA", "l2-reading-area", "Reading Area", "Reading Area", 80, "available", "Open Level 2 reading area for quiet individual study.", "Reading tables, study chairs, power outlets"),
+    createRoom(2, "L2-ISR", "l2-information-searching-room", "Information Searching Room", "Computer Lab", 24, "available", "Dedicated room for catalogue, database, and information-searching activities.", "Computers, projector, network access"),
+    createRoom(2, "L2-RC", "l2-references-collection", "References Collection", "Collection", 40, "closed", "Reference materials for consultation within the library.", "Reference shelving, reading desks"),
+    createRoom(2, "L2-OAC", "l2-open-access-collection", "Open Access Collection", "Collection", 50, "closed", "Open-shelf collection available for browsing and study.", "Book shelving, catalogue stations"),
+    createRoom(2, "L2-MM", "l2-mini-museum", "Mini Museum", "Museum", 25, "closed", "Compact museum area presenting selected institutional and library exhibits.", "Display cases, information panels"),
+    createRoom(2, "L2-HR", "l2-hikmah-room", "Hikmah Room", "Discussion Room", 20, "available", "Enclosed collaborative room for meetings, discussions, and learning activities.", "Display, whiteboard, meeting tables"),
+
+    createRoom(3, "L3-TSJJ", "l3-tan-sri-johan-jaaffar-collection", "Tan Sri Johan Jaaffar Collection", "Special Collection", 30, "closed", "Special collection dedicated to Tan Sri Johan Jaaffar.", "Collection shelving, reading tables"),
+    createRoom(3, "L3-RA", "l3-reading-area", "Reading Area", "Reading Area", 100, "available", "Large Level 3 reading area for quiet study and research.", "Reading desks, power outlets, Wi-Fi"),
+    createRoom(3, "L3-LR1", "l3-lestari-room-1", "Lestari Room 1", "Discussion Room", 12, "available", "Bookable discussion room for small-group learning and meetings.", "Display, whiteboard, meeting table"),
+    createRoom(3, "L3-LR2", "l3-lestari-room-2", "Lestari Room 2", "Discussion Room", 12, "available", "Bookable discussion room for small-group learning and meetings.", "Display, whiteboard, meeting table"),
+    createRoom(3, "L3-LL", "l3-lestari-lounge", "Lestari Lounge", "Lounge", 24, "available", "Informal collaborative lounge adjoining the Lestari rooms.", "Lounge seating, tables, power outlets"),
+    createRoom(3, "L3-AJA", "l3-al-jazari-auditorium", "Al-Jazari Auditorium", "Auditorium", 180, "available", "Auditorium for talks, briefings, presentations, and academic events.", "Stage, projector, audio system, fixed seating"),
+    createRoom(3, "L3-JMR", "l3-journal-magazine-room", "Journal & Magazine Room", "Periodicals", 35, "closed", "Reading room for current journals, magazines, and periodicals.", "Periodical shelving, reading tables"),
+    createRoom(3, "L3-PH", "l3-permata-hikmah", "Permata Hikmah", "Learning Room", 16, "available", "Collaborative learning room for focused group activities.", "Interactive display, whiteboard, tables"),
+    createRoom(3, "L3-ASR", "l3-al-shirazi-scholar-room", "Al-Shirazi Scholar Room", "Scholar Room", 10, "available", "Quiet scholar room intended for focused academic discussion and research.", "Meeting table, display, power outlets"),
+    createRoom(3, "L3-DEA", "l3-drone-exhibition-area", "Drone Exhibition Area", "Exhibition", 30, "closed", "Exhibition area featuring drone technology and related projects.", "Exhibition stands, information panels"),
+    createRoom(3, "L3-OAC", "l3-open-access-collection", "Open Access Collection", "Collection", 50, "closed", "Level 3 open-shelf collection for browsing and study.", "Book shelving, catalogue stations"),
+    createRoom(3, "L3-SZ", "l3-sister-zone", "Sister Zone", "Learning Zone", 20, "available", "Dedicated collaborative zone for student learning and community activities.", "Flexible seating, tables, power outlets"),
+    createRoom(3, "L3-EE", "l3-edu-entertainment", "Edu Entertainment", "Creative Learning", 30, "available", "Interactive education and entertainment space for group activities.", "Display, flexible seating, activity tables"),
+    createRoom(3, "L3-ER", "l3-eksplorasi-room", "Eksplorasi Room", "Learning Room", 24, "available", "Flexible exploration room for workshops, project work, and collaborative sessions.", "Display, whiteboard, movable tables"),
+
+    createRoom(4, "L4-RA", "l4-reading-area", "Reading Area", "Reading Area", 100, "available", "Level 4 reading area for quiet study and extended research.", "Reading desks, power outlets, Wi-Fi"),
+    createRoom(4, "L4-BC", "l4-bibliotherapy-corner", "Bibliotherapy Corner", "Wellbeing Space", 12, "available", "Calm reading corner supporting reflective reading and wellbeing.", "Comfort seating, curated reading materials"),
+    createRoom(4, "L4-CC", "l4-creative-collection", "Creative Collection", "Collection", 30, "closed", "Curated creative collection for browsing and inspiration.", "Collection shelving, display tables"),
+    createRoom(4, "L4-OAC", "l4-open-access-collection", "Open Access Collection", "Collection", 50, "closed", "Level 4 open-shelf collection available for browsing.", "Book shelving, catalogue stations"),
+    createRoom(4, "L4-IR", "l4-iqra-room", "Iqra' Room", "Discussion Room", 20, "available", "Bookable room for group reading, discussion, and academic activities.", "Display, whiteboard, meeting tables"),
+  ];
+
+  const FLOOR_PLAN_DATA = {
+    1: {
+      image: "images/floor-plan-level-1.png",
+      title: "Visitor services, learning, and extended-hours spaces",
+      caption: "Level 1 brings together the main visitor services, lounges, multimedia facilities, the 24 Hours Reading Room, and MakerSpace UTHM.",
+      facilities: ["Gallery", "Circulation Counter", "AATA Lounge", "Special User Area", "Closed Reference Room", "Multimedia Room", "International Office", "PPS Lounge", "Go Book Coffee Corner", "24 Hours Reading Room", "MakerSpace UTHM"],
+    },
+    2: {
+      image: "images/floor-plan-level-2.png",
+      title: "Reading, information searching, and reference facilities",
+      caption: "Level 2 provides open reading and information-searching facilities alongside reference collections, Showcase PTTA, the Mini Museum, and Hikmah Room.",
+      facilities: ["Showcase PTTA", "Reading Area", "Information Searching Room", "References Collection", "Open Access Collection", "Mini Museum", "Hikmah Room"],
+    },
+    3: {
+      image: "images/floor-plan-level-3.png",
+      title: "Collaborative rooms, auditorium, collections, and learning zones",
+      caption: "Level 3 is PTTA's largest mix of bookable and specialist spaces, including the Lestari rooms, Al-Jazari Auditorium, scholar facilities, exhibitions, and creative learning zones.",
+      facilities: ["Tan Sri Johan Jaaffar Collection", "Reading Area", "Lestari Room 1", "Lestari Room 2", "Lestari Lounge", "Al-Jazari Auditorium", "Journal & Magazine Room", "Permata Hikmah", "Al-Shirazi Scholar Room", "Drone Exhibition Area", "Open Access Collection", "Sister Zone", "Edu Entertainment", "Eksplorasi Room"],
+    },
+    4: {
+      image: "images/floor-plan-level-4.png",
+      title: "Quiet reading, wellbeing, creative collections, and Iqra' Room",
+      caption: "Level 4 offers focused reading and reflective spaces with Bibliotherapy Corner, Creative Collection, Open Access Collection, and the bookable Iqra' Room.",
+      facilities: ["Reading Area", "Bibliotherapy Corner", "Creative Collection", "Open Access Collection", "Iqra' Room"],
+    },
+  };
+
   const seedState = () => ({
-    rooms: [
-      {
-        id: "room-a204",
-        code: "A-204",
-        name: "Discussion Room A-204",
-        zone: "Discussion Zone A",
-        type: "Discussion",
-        capacity: 8,
-        status: "available",
-        equipment: "Display, whiteboard, power outlets",
-      },
-      {
-        id: "room-b112",
-        code: "B-112",
-        name: "Learning Space B-112",
-        zone: "Learning Space B",
-        type: "Learning Space",
-        capacity: 6,
-        status: "pending",
-        equipment: "Whiteboard, discussion table, power outlets",
-      },
-      {
-        id: "room-c301",
-        code: "C-301",
-        name: "Media Room C-301",
-        zone: "Media Room C",
-        type: "Media Room",
-        capacity: 10,
-        status: "conflict",
-        equipment: "Display wall, audio system, presentation table",
-      },
-      {
-        id: "room-d018",
-        code: "D-018",
-        name: "Room D-018",
-        zone: "Quiet Study Area",
-        type: "Quiet Study",
-        capacity: 4,
-        status: "available",
-        equipment: "Individual desks, power outlets",
-      },
-    ],
+    rooms: PTTA_ROOMS.map((room) => ({ ...room })),
     users: [
       {
         id: "CI250058",
@@ -196,9 +239,9 @@
     ],
     bookings: [
       {
-        id: "LB-204-0626",
+        id: "LB-LR1-0626",
         userId: "CI250058",
-        roomId: "room-a204",
+        roomId: "l3-lestari-room-1",
         date: "2026-06-10",
         start: "10:00",
         end: "12:00",
@@ -209,9 +252,9 @@
         createdAt: "2026-06-01T08:30:00.000Z",
       },
       {
-        id: "LB-112-0626",
+        id: "LB-HIK-0626",
         userId: "CI250003",
-        roomId: "room-b112",
+        roomId: "l2-hikmah-room",
         date: "2026-06-12",
         start: "14:00",
         end: "16:00",
@@ -222,9 +265,9 @@
         createdAt: "2026-06-02T06:20:00.000Z",
       },
       {
-        id: "LB-301-0626",
+        id: "LB-EKS-0626",
         userId: "CI250023",
-        roomId: "room-c301",
+        roomId: "l3-eksplorasi-room",
         date: "2026-06-12",
         start: "15:00",
         end: "17:00",
@@ -235,9 +278,9 @@
         createdAt: "2026-06-03T04:10:00.000Z",
       },
       {
-        id: "LB-086-0526",
+        id: "LB-IQR-0526",
         userId: "CI250058",
-        roomId: "room-d018",
+        roomId: "l4-iqra-room",
         date: "2026-05-28",
         start: "09:00",
         end: "11:00",
@@ -248,9 +291,9 @@
         createdAt: "2026-05-20T01:00:00.000Z",
       },
       {
-        id: "LB-052-0426",
+        id: "LB-MMR-0426",
         userId: "CI250003",
-        roomId: "room-b112",
+        roomId: "l1-multimedia-room",
         date: "2026-04-18",
         start: "11:00",
         end: "13:00",
@@ -263,27 +306,27 @@
     ],
     notifications: [
       {
-        id: "note-confirmed-a204",
-        bookingId: "LB-204-0626",
-        title: "Room A-204 approved",
+        id: "note-confirmed-lestari-room-1",
+        bookingId: "LB-LR1-0626",
+        title: "Lestari Room 1 approved",
         message: "Your booking for 10 June 2026 from 10:00 AM to 12:00 PM has been confirmed.",
         status: "confirmed",
         read: false,
         createdAt: "2026-06-01T08:31:00.000Z",
       },
       {
-        id: "note-pending-b112",
-        bookingId: "LB-112-0626",
-        title: "Room B-112 request",
+        id: "note-pending-hikmah-room",
+        bookingId: "LB-HIK-0626",
+        title: "Hikmah Room request",
         message: "Your request is waiting for administrator review.",
         status: "pending",
         read: false,
         createdAt: "2026-06-02T06:22:00.000Z",
       },
       {
-        id: "note-conflict-c301",
-        bookingId: "LB-301-0626",
-        title: "Media Room C-301 conflict",
+        id: "note-conflict-eksplorasi-room",
+        bookingId: "LB-EKS-0626",
+        title: "Eksplorasi Room conflict",
         message: "The selected time overlaps with another reservation.",
         status: "conflict",
         read: true,
@@ -301,7 +344,34 @@
       const fallback = seedState();
       try {
         const stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
-        const state = stored ? { ...fallback, ...stored } : fallback;
+        const legacy = stored
+          ? null
+          : LEGACY_STORAGE_KEYS
+              .map((key) => JSON.parse(localStorage.getItem(key)))
+              .find(Boolean);
+        const legacyUsers = Array.isArray(legacy?.users)
+          ? legacy.users.filter((user) => !fallback.users.some((seedUser) => seedUser.id === user.id))
+          : [];
+        const legacyBookings = Array.isArray(legacy?.bookings)
+          ? legacy.bookings.filter((booking) => fallback.rooms.some((room) => room.id === booking.roomId))
+          : [];
+        const migratedBookings = legacyBookings.length ? legacyBookings : fallback.bookings;
+        const migratedBookingIds = new Set(migratedBookings.map((booking) => booking.id));
+        const legacyNotifications = Array.isArray(legacy?.notifications)
+          ? legacy.notifications.filter((notification) => migratedBookingIds.has(notification.bookingId))
+          : [];
+        const state = stored
+          ? { ...fallback, ...stored }
+          : {
+              ...fallback,
+              users: [...fallback.users, ...legacyUsers],
+              bookings: migratedBookings,
+              notifications: legacyNotifications.length ? legacyNotifications : fallback.notifications,
+            };
+        state.rooms = state.rooms.map((room) => ({
+          ...room,
+          status: room.status === "available" ? "available" : "closed",
+        }));
         state.users = state.users.map((user) => ({
           ...user,
           password: user.password || (user.role === "Student" ? "student123" : ""),
@@ -379,6 +449,7 @@
         ...booking,
         roomName: room?.name || booking.roomId,
         roomCode: room?.code || booking.roomId,
+        floor: room?.floor || "",
         zone: room?.zone || "",
         userName: user?.name || booking.userId,
       };
@@ -506,6 +577,7 @@
 
     const toolbar = document.createElement("div");
     toolbar.className = "data-toolbar";
+    if (!options.status) toolbar.classList.add("two-controls");
     toolbar.innerHTML = `
       <label>Search
         <input type="search" data-control="search" placeholder="${escapeHTML(options.search || "Search records")}">
@@ -548,26 +620,74 @@
 
   const emptyState = (message) => `<p class="empty-state">${escapeHTML(message)}</p>`;
 
-  const imageForRoom = (room) => {
-    const type = String(room.type || "").toLowerCase();
-    if (type.includes("media")) return "images/room-media.svg";
-    if (type.includes("study") || type.includes("learning")) return "images/room-study.svg";
-    return "images/room-discussion.svg";
+  const initFloorPlanTabs = () => {
+    all("[data-floor-plans]").forEach((floorPlans) => {
+      const tabs = all("[data-floor-tab]", floorPlans);
+      const image = floorPlans.querySelector("[data-floor-plan-image]");
+      const caption = floorPlans.querySelector("[data-floor-plan-caption]");
+      const label = floorPlans.querySelector("[data-floor-label]");
+      const title = floorPlans.querySelector("[data-floor-title]");
+      const facilities = floorPlans.querySelector("[data-floor-facilities]");
+      const availabilityLink = floorPlans.querySelector("[data-floor-availability]");
+
+      const selectFloor = (floor, updateFilter = true) => {
+        const data = FLOOR_PLAN_DATA[floor];
+        if (!data || !image) return;
+        tabs.forEach((tab) => {
+          const selected = tab.dataset.floorTab === String(floor);
+          tab.classList.toggle("active", selected);
+          tab.setAttribute("aria-selected", String(selected));
+          tab.tabIndex = selected ? 0 : -1;
+        });
+        image.src = data.image;
+        image.alt = `PTTA UTHM Level ${floor} floor plan`;
+        if (caption) caption.textContent = data.caption;
+        if (label) label.textContent = `Level ${floor} Facilities`;
+        if (title) title.textContent = data.title;
+        if (facilities) {
+          facilities.innerHTML = data.facilities.map((facility) => `<li>${escapeHTML(facility)}</li>`).join("");
+        }
+        if (availabilityLink) {
+          availabilityLink.href = `availability.html?floor=${floor}`;
+          availabilityLink.textContent = `Check Level ${floor} Availability`;
+        }
+
+        const floorFilter = byId("floor");
+        if (updateFilter && floorFilter && floorPlans.closest("main")) {
+          floorFilter.value = String(floor);
+          floorFilter.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+      };
+      floorPlans.selectFloor = selectFloor;
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => selectFloor(tab.dataset.floorTab));
+        tab.addEventListener("keydown", (event) => {
+          if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+          event.preventDefault();
+          let nextIndex = index;
+          if (event.key === "ArrowLeft") nextIndex = (index - 1 + tabs.length) % tabs.length;
+          if (event.key === "ArrowRight") nextIndex = (index + 1) % tabs.length;
+          if (event.key === "Home") nextIndex = 0;
+          if (event.key === "End") nextIndex = tabs.length - 1;
+          tabs[nextIndex].focus();
+          selectFloor(tabs[nextIndex].dataset.floorTab);
+        });
+      });
+
+      const queryFloor = Number(queryParams().get("floor"));
+      const initialFloor = [1, 2, 3, 4].includes(queryFloor)
+        ? queryFloor
+        : Number(floorPlans.dataset.initialFloor || 1);
+      selectFloor(initialFloor, false);
+    });
   };
 
-  const availabilityFor = (room, filters = {}) => {
-    if (!filters.date || !filters.start || !filters.end) return room.status;
-    const conflict = store.bookingConflict({
-      roomId: room.id,
-      date: filters.date,
-      start: filters.start,
-      end: filters.end,
-    });
-    return conflict ? conflict.status : room.status === "closed" ? "closed" : "available";
-  };
+  const imageForRoom = (room) =>
+    FLOOR_PLAN_DATA[Number(room?.floor)]?.image || FLOOR_PLAN_DATA[1].image;
 
   const slotStatusFor = (room, date, start, end) => {
-    if (room.status === "closed") return "conflict";
+    if (room.status !== "available") return "closed";
     const overlapsSlot = store
       .activeBookings()
       .filter(
@@ -576,16 +696,28 @@
           booking.date === date &&
           overlaps(start, end, booking.start, booking.end)
       );
-    if (overlapsSlot.some((booking) => booking.status === "conflict")) return "conflict";
-    if (overlapsSlot.length) return "booked";
-    return "available";
+    return overlapsSlot.length ? "closed" : "available";
   };
+
+  const slotsForRoom = (room, date) =>
+    generateTimeSlots().map(([start, end]) => ({
+      start,
+      end,
+      status: slotStatusFor(room, date, start, end),
+    }));
+
+  const roomHasAvailableSlot = (room, date) =>
+    slotsForRoom(room, date).some((slot) => slot.status === "available");
+
+  const nextAvailableSlot = (room, date) =>
+    slotsForRoom(room, date).find((slot) => slot.status === "available");
 
   const populateRoomSelect = (select, selectedRoomId = "") => {
     if (!select) return;
     const selected = selectedRoomId || select.value;
     select.innerHTML = store
       .all("rooms")
+      .filter((room) => room.status === "available")
       .map((room) => `<option value="${escapeHTML(room.id)}">${escapeHTML(room.name)} (${escapeHTML(room.capacity)} users)</option>`)
       .join("");
     if (selected && store.roomById(selected)) select.value = selected;
@@ -610,7 +742,7 @@
     if (room && booking.participants > Number(room.capacity)) {
       errors.push({ field: "participants", message: `This room supports up to ${room.capacity} users.` });
     }
-    if (room?.status === "closed") {
+    if (room?.status !== "available") {
       errors.push({ field: "room", message: "This room is closed and cannot be booked." });
     }
     const duplicate = store.bookingConflict(booking, ignoreId);
@@ -660,20 +792,9 @@
     const roomSection = document.querySelector('[aria-label="Available room list"]');
     if (!roomSection) return;
 
-    const bookingDialog = byId("booking-dialog");
-    const bookingForm = byId("availability-booking-form");
-    const bookingSuccess = byId("booking-success");
-    const bookingDate = byId("booking-date");
     const params = queryParams();
-    let selectedRoom = null;
-
-    if (bookingDate) {
-      bookingDate.min = localDateValue();
-    }
-
     const searchToolbar = buildToolbar(roomSection, {
-      search: "Search by room, zone, or equipment",
-      status: ["available", "pending", "conflict", "closed"],
+      search: "Search by room, floor, or equipment",
       sort: [
         ["name-asc", "Name A-Z"],
         ["name-desc", "Name Z-A"],
@@ -681,79 +802,21 @@
         ["capacity-low", "Capacity low-high"],
       ],
     });
-    const statusFilter = searchToolbar?.querySelector('[data-control="status"]');
-    if (statusFilter) statusFilter.value = "available";
-
     const filterForm = document.querySelector('form[action="availability.html"]');
-    if (isDateValue(params.get("date"))) byId("date").value = params.get("date");
-    if (params.get("start")) byId("start").value = params.get("start");
-    if (params.get("end")) byId("end").value = params.get("end");
-    const capacity = byId("capacity");
-    if (capacity && !capacity.dataset.enhanced) {
-      capacity.dataset.enhanced = "true";
-      capacity.innerHTML = `
-        <option value="">Any capacity</option>
-        <option value="4">At least 4 people</option>
-        <option value="6">At least 6 people</option>
-        <option value="8">At least 8 people</option>
-        <option value="10">At least 10 people</option>
-      `;
+    const dateInput = byId("date");
+    const floorInput = byId("floor");
+    const selectedDate = isDateValue(params.get("date")) ? params.get("date") : localDateValue();
+    const selectedFloor = ["1", "2", "3", "4"].includes(params.get("floor")) ? params.get("floor") : "1";
+    if (dateInput) {
+      dateInput.min = localDateValue();
+      dateInput.value = selectedDate;
     }
+    if (floorInput) floorInput.value = selectedFloor;
 
     const currentFilters = () => ({
-      date: byId("date")?.value || "",
-      start: byId("start")?.value || "",
-      end: byId("end")?.value || "",
-      capacity: Number(byId("capacity")?.value || 0),
+      date: dateInput?.value || localDateValue(),
+      floor: Number(floorInput?.value || 1),
     });
-
-    const updateSelectedRoomSummary = () => {
-      if (!selectedRoom || !bookingForm) return;
-      const data = bookingFromForm(bookingForm);
-      const status = availabilityFor(selectedRoom, data);
-      byId("selected-room-name").textContent = selectedRoom.name;
-      byId("selected-room-capacity").textContent = `${selectedRoom.capacity} users`;
-      byId("selected-room-status").textContent = titleCase(status);
-    };
-
-    const closeBookingDialog = () => {
-      if (!bookingDialog) return;
-      if (typeof bookingDialog.close === "function") {
-        bookingDialog.close();
-      } else {
-        bookingDialog.removeAttribute("open");
-      }
-    };
-
-    const openBookingDialog = (roomId, defaults = {}) => {
-      selectedRoom = store.roomById(roomId);
-      if (!selectedRoom || !bookingDialog || !bookingForm) return;
-      if (availabilityFor(selectedRoom, defaults) !== "available") {
-        notify("This room is not currently available for booking.", "conflict");
-        return;
-      }
-
-      clearFormErrors(bookingForm);
-      bookingForm.reset();
-      bookingForm.hidden = false;
-      bookingSuccess.hidden = true;
-      bookingSuccess.innerHTML = "";
-
-      bookingForm.elements.room.value = selectedRoom.id;
-      bookingForm.elements["booking-date"].value = defaults.date || "";
-      bookingForm.elements["start-time"].value = defaults.start || "";
-      bookingForm.elements["end-time"].value = defaults.end || "";
-      bookingForm.elements.participants.max = selectedRoom.capacity;
-      bookingForm.elements.participants.value = Math.min(4, selectedRoom.capacity);
-      updateSelectedRoomSummary();
-
-      if (typeof bookingDialog.showModal === "function") {
-        bookingDialog.showModal();
-      } else {
-        bookingDialog.setAttribute("open", "");
-      }
-      bookingForm.elements["booking-date"].focus();
-    };
 
     const render = () => {
       const toolbar = toolbarValues(searchToolbar);
@@ -761,10 +824,10 @@
       const rooms = sortByMode(
         store
           .all("rooms")
-          .map((room) => ({ ...room, computedStatus: availabilityFor(room, filters) }))
-          .filter((room) => matchesKeyword(room, ["name", "code", "zone", "type", "equipment"], toolbar.search))
-          .filter((room) => !toolbar.status || room.computedStatus === toolbar.status)
-          .filter((room) => !filters.capacity || Number(room.capacity) >= filters.capacity),
+          .filter((room) => matchesKeyword(room, ["name", "code", "zone", "floor", "type", "description", "equipment"], toolbar.search))
+          .filter((room) => room.status === "available")
+          .filter((room) => Number(room.floor) === filters.floor)
+          .filter((room) => roomHasAvailableSlot(room, filters.date)),
         toolbar.sort
       );
 
@@ -772,107 +835,51 @@
         ? rooms
             .map(
               (room) => {
-                const detailsParameters = new URLSearchParams({ room: room.id });
-                if (filters.date) detailsParameters.set("date", filters.date);
+                const openSlot = nextAvailableSlot(room, filters.date);
+                const detailsParameters = new URLSearchParams({
+                  room: room.id,
+                  date: filters.date,
+                  floor: room.floor,
+                });
                 return `
                 <article class="card">
-                  <div class="room-image"><img src="${escapeHTML(imageForRoom(room))}" alt="${escapeHTML(room.name)} preview"></div>
-                  ${statusBadge(room.computedStatus)}
+                  <div class="room-image"><img src="${escapeHTML(imageForRoom(room))}" alt="PTTA Level ${escapeHTML(room.floor)} floor plan for ${escapeHTML(room.name)}"></div>
+                  ${statusBadge("available")}
                   <h2>${escapeHTML(room.name)}</h2>
                   <ul class="room-meta">
-                    <li><span>Zone</span><strong>${escapeHTML(room.zone)}</strong></li>
+                    <li><span>Floor</span><strong>Level ${escapeHTML(room.floor)}</strong></li>
                     <li><span>Capacity</span><strong>${escapeHTML(room.capacity)} users</strong></li>
-                    <li><span>Equipment</span><strong>${escapeHTML(room.equipment)}</strong></li>
+                    <li><span>Next slot</span><strong>${escapeHTML(formatTime(openSlot.start))} - ${escapeHTML(formatTime(openSlot.end))}</strong></li>
                   </ul>
                   <div class="actions">
                     <a class="button small" href="room-details.html?${escapeHTML(detailsParameters.toString())}">View Details</a>
-                    ${
-                      room.computedStatus === "available"
-                        ? `<button class="button small secondary" type="button" data-book-room="${escapeHTML(room.id)}">Book</button>`
-                        : ""
-                    }
                   </div>
                 </article>
               `;
               }
             )
             .join("")
-        : emptyState("No rooms match the current search or filter.");
+        : emptyState(`No rooms on Level ${filters.floor} have an available time slot for ${formatDate(filters.date)}.`);
     };
 
     filterForm?.addEventListener("submit", (event) => {
       event.preventDefault();
+      const filters = currentFilters();
+      const nextParams = new URLSearchParams({ date: filters.date, floor: filters.floor });
+      window.history.replaceState({}, "", `availability.html?${nextParams.toString()}`);
       render();
     });
-    filterForm?.addEventListener("input", debounce(render));
-    filterForm?.addEventListener("change", render);
+    floorInput?.addEventListener("change", () => {
+      const floor = Number(floorInput.value);
+      const floorPlans = document.querySelector("[data-floor-plans]");
+      if ([1, 2, 3, 4].includes(floor) && typeof floorPlans?.selectFloor === "function") {
+        floorPlans.selectFloor(floor, false);
+      }
+      render();
+    });
     bindToolbar(searchToolbar, render);
 
-    roomSection.addEventListener("click", (event) => {
-      const button = event.target.closest("[data-book-room]");
-      if (!button) return;
-      openBookingDialog(button.dataset.bookRoom, currentFilters());
-    });
-
-    all("[data-close-booking]").forEach((button) => {
-      button.addEventListener("click", closeBookingDialog);
-    });
-
-    bookingDialog?.addEventListener("click", (event) => {
-      if (event.target === bookingDialog) closeBookingDialog();
-    });
-
-    bookingForm?.addEventListener("input", debounce(updateSelectedRoomSummary));
-    bookingForm?.addEventListener("change", updateSelectedRoomSummary);
-    bookingForm?.addEventListener("submit", (event) => {
-      event.preventDefault();
-      if (!selectedRoom) return;
-
-      const data = bookingFromForm(bookingForm);
-      const errors = validateBooking(data);
-      if (errors.length) {
-        showFormErrors(bookingForm, errors);
-        notify("Please fix the booking details.", "conflict");
-        return;
-      }
-
-      const status = availabilityFor(selectedRoom, data) === "available" ? "confirmed" : "pending";
-      const booking = store.create("bookings", { ...data, status });
-      store.createNotification({
-        bookingId: booking.id,
-        status,
-        title: `${selectedRoom.name} ${status === "confirmed" ? "confirmed" : "request received"}`,
-        message: `Your booking for ${formatDate(booking.date)} from ${formatTime(booking.start)} to ${formatTime(booking.end)} is ${status}.`,
-      });
-      writeSession({ currentBookingId: booking.id, editingBookingId: "", cancelBookingId: "" });
-
-      bookingForm.hidden = true;
-      bookingSuccess.hidden = false;
-      bookingSuccess.className = `alert ${statusClass(status)}`;
-      bookingSuccess.innerHTML = `
-        ${statusBadge(status)}
-        <h3>Booking saved successfully</h3>
-        <p><strong>${escapeHTML(selectedRoom.name)}</strong><br>${escapeHTML(formatDate(booking.date))}, ${escapeHTML(formatTime(booking.start))} - ${escapeHTML(formatTime(booking.end))}</p>
-        <p>Reservation ID: <strong>${escapeHTML(booking.id)}</strong></p>
-        <div class="actions">
-          <a class="button" href="dashboard.html">View Dashboard</a>
-          <button class="button secondary" type="button" data-book-another>Book Another Room</button>
-        </div>
-      `;
-      bookingSuccess.querySelector("[data-book-another]")?.addEventListener("click", closeBookingDialog);
-      notify("Booking saved successfully.", status);
-      render();
-    });
-
     render();
-
-    if (params.get("book") === "1" && params.get("room")) {
-      openBookingDialog(params.get("room"), {
-        date: params.get("date") || "",
-        start: params.get("start") || "",
-        end: params.get("end") || "",
-      });
-    }
   };
 
   const renderRoomDetailsPage = () => {
@@ -881,6 +888,9 @@
     const room = store.roomById(params.get("room")) || store.all("rooms")[0];
     const selectedDate = isDateValue(params.get("date")) ? params.get("date") : localDateValue();
     if (!room) return;
+    const bookingDialog = byId("booking-dialog");
+    const bookingForm = byId("room-details-booking-form");
+    const bookingSuccess = byId("booking-success");
 
     document.querySelector(".page-title h1").textContent = room.name;
     const pageDescription = document.querySelector(".page-title .section > p:last-child");
@@ -890,48 +900,139 @@
     const roomImage = document.querySelector(".grid.two .panel img");
     if (roomImage) {
       roomImage.src = imageForRoom(room);
-      roomImage.alt = `${room.name} preview`;
+      roomImage.alt = `PTTA UTHM Level ${room.floor} floor plan showing ${room.name}`;
     }
     const infoPanel = all(".grid.two .panel")[1];
-    if (infoPanel) {
+    const renderRoomInfo = () => {
+      if (!infoPanel) return;
+      const roomAvailability = roomHasAvailableSlot(room, selectedDate) ? "available" : "closed";
       infoPanel.innerHTML = `
-        ${statusBadge(room.status)}
+        ${statusBadge(roomAvailability)}
         <h2>Room information</h2>
         <ul class="detail-list">
-          <li><span>Zone</span><strong>${escapeHTML(room.zone)}</strong></li>
+          <li><span>Room name</span><strong>${escapeHTML(room.name)}</strong></li>
+          <li><span>Floor level</span><strong>Level ${escapeHTML(room.floor)}</strong></li>
+          <li><span>Description</span><strong>${escapeHTML(room.description)}</strong></li>
           <li><span>Capacity</span><strong>${escapeHTML(room.capacity)} users</strong></li>
+          <li><span>Availability</span><strong>${escapeHTML(titleCase(roomAvailability))}</strong></li>
           <li><span>Equipment</span><strong>${escapeHTML(room.equipment)}</strong></li>
-          <li><span>Recommended use</span><strong>${escapeHTML(room.type)}</strong></li>
         </ul>
         <div class="actions">
-          ${room.status === "available" ? `<a class="button" href="availability.html?room=${encodeURIComponent(room.id)}&book=1&date=${encodeURIComponent(selectedDate)}">Book This Room</a>` : ""}
-          <a class="button secondary" href="availability.html?date=${encodeURIComponent(selectedDate)}">Back to Availability</a>
+          <a class="button secondary" href="availability.html?date=${encodeURIComponent(selectedDate)}&floor=${encodeURIComponent(room.floor)}">Back to Availability</a>
         </div>
       `;
-    }
+    };
+    renderRoomInfo();
 
     const tbody = document.querySelector("tbody");
     if (!tbody) return;
     const caption = document.querySelector("table caption");
     if (caption) caption.textContent = `Time slots for ${room.name} on ${formatDate(selectedDate)}`;
-    const slots = generateTimeSlots();
-    tbody.innerHTML = slots
-      .map(([start, end]) => {
-        const slotStatus = slotStatusFor(room, selectedDate, start, end);
-        return `
-          <tr>
-            <td>${escapeHTML(formatDate(selectedDate))}</td>
-            <td>${escapeHTML(formatTime(start))} - ${escapeHTML(formatTime(end))}</td>
-            <td>${statusBadge(slotStatus)}</td>
-            <td>${
-              slotStatus === "available"
-                ? `<a class="button small" href="availability.html?room=${encodeURIComponent(room.id)}&book=1&date=${encodeURIComponent(selectedDate)}&start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}">Book</a>`
-                : `<a class="button small ghost" href="availability.html?date=${encodeURIComponent(selectedDate)}">Find Other</a>`
-            }</td>
-          </tr>
-        `;
-      })
-      .join("");
+
+    const renderSlots = () => {
+      tbody.innerHTML = slotsForRoom(room, selectedDate)
+        .map(
+          ({ start, end, status }) => `
+            <tr>
+              <td>${escapeHTML(formatTime(start))} - ${escapeHTML(formatTime(end))}</td>
+              <td>${statusBadge(status)}</td>
+              <td>${
+                status === "available"
+                  ? `<button class="button small" type="button" data-select-slot data-start="${escapeHTML(start)}" data-end="${escapeHTML(end)}">Book</button>`
+                  : `<span class="helper-text">Unavailable</span>`
+              }</td>
+            </tr>
+          `
+        )
+        .join("");
+    };
+
+    const closeBookingDialog = () => {
+      if (!bookingDialog) return;
+      if (typeof bookingDialog.close === "function") bookingDialog.close();
+      else bookingDialog.removeAttribute("open");
+    };
+
+    const openBookingDialog = (start, end) => {
+      if (!bookingDialog || !bookingForm) return;
+      if (slotStatusFor(room, selectedDate, start, end) !== "available") {
+        notify("This time slot is closed. Choose another available slot.", "conflict");
+        renderSlots();
+        return;
+      }
+
+      clearFormErrors(bookingForm);
+      bookingForm.reset();
+      bookingForm.hidden = false;
+      bookingSuccess.hidden = true;
+      bookingSuccess.innerHTML = "";
+      bookingForm.elements.room.value = room.id;
+      bookingForm.elements["booking-date"].value = selectedDate;
+      bookingForm.elements["start-time"].value = start;
+      bookingForm.elements["end-time"].value = end;
+      bookingForm.elements.participants.max = room.capacity;
+      bookingForm.elements.participants.value = Math.min(4, room.capacity);
+      byId("selected-room-name").textContent = room.name;
+      byId("selected-booking-date").textContent = formatDate(selectedDate);
+      byId("selected-booking-time").textContent = `${formatTime(start)} - ${formatTime(end)}`;
+      byId("selected-room-capacity").textContent = `${room.capacity} users`;
+
+      if (typeof bookingDialog.showModal === "function") bookingDialog.showModal();
+      else bookingDialog.setAttribute("open", "");
+      bookingForm.elements.participants.focus();
+    };
+
+    tbody.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-select-slot]");
+      if (!button) return;
+      openBookingDialog(button.dataset.start, button.dataset.end);
+    });
+
+    all("[data-close-booking]").forEach((button) => button.addEventListener("click", closeBookingDialog));
+    bookingDialog?.addEventListener("click", (event) => {
+      if (event.target === bookingDialog) closeBookingDialog();
+    });
+
+    bookingForm?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const data = bookingFromForm(bookingForm);
+      const errors = validateBooking(data);
+      if (errors.length) {
+        showFormErrors(bookingForm, errors);
+        notify("This booking could not be saved. Choose an available slot and check the participant count.", "conflict");
+        renderSlots();
+        return;
+      }
+
+      const booking = store.create("bookings", { ...data, status: "confirmed" });
+      store.createNotification({
+        bookingId: booking.id,
+        status: "confirmed",
+        title: `${room.name} confirmed`,
+        message: `Your booking for ${formatDate(booking.date)} from ${formatTime(booking.start)} to ${formatTime(booking.end)} is confirmed.`,
+      });
+      writeSession({ currentBookingId: booking.id, editingBookingId: "", cancelBookingId: "" });
+
+      bookingForm.hidden = true;
+      bookingSuccess.hidden = false;
+      bookingSuccess.className = "alert confirmed";
+      bookingSuccess.innerHTML = `
+        ${statusBadge("confirmed")}
+        <h3>Booking saved successfully</h3>
+        <p><strong>${escapeHTML(room.name)}</strong><br>${escapeHTML(formatDate(booking.date))}, ${escapeHTML(formatTime(booking.start))} - ${escapeHTML(formatTime(booking.end))}</p>
+        <p>Reservation ID: <strong>${escapeHTML(booking.id)}</strong></p>
+        <div class="actions">
+          <a class="button" href="dashboard.html">View Dashboard</a>
+          <button class="button secondary" type="button" data-close-after-booking>Choose Another Slot</button>
+        </div>
+      `;
+      bookingSuccess.querySelector("[data-close-after-booking]")?.addEventListener("click", closeBookingDialog);
+      renderSlots();
+      renderRoomInfo();
+      notify("Booking saved successfully.", "confirmed");
+    });
+
+    renderSlots();
   };
 
   const initConfirmationPage = () => {
@@ -1298,7 +1399,7 @@
   };
 
   const roomMatches = (room, values) =>
-    matchesKeyword(room, ["name", "code", "zone", "type", "equipment", "status"], values.search) &&
+    matchesKeyword(room, ["name", "code", "zone", "floor", "type", "description", "equipment", "status"], values.search) &&
     (!values.status || room.status === values.status);
 
   const initAdminRoomsPage = () => {
@@ -1309,7 +1410,7 @@
     if (!tableWrap || !tbody || !form) return;
     const headerRow = tableWrap.querySelector("thead tr");
     if (headerRow) {
-      headerRow.innerHTML = "<th>Room</th><th>Type</th><th>Capacity</th><th>Status</th><th>Actions</th>";
+      headerRow.innerHTML = "<th>Room</th><th>Floor</th><th>Type</th><th>Capacity</th><th>Status</th><th>Actions</th>";
     }
 
     if (!byId("room-name")) {
@@ -1317,7 +1418,15 @@
         "afterbegin",
         `
           <label for="room-name">Room name<input id="room-name" name="room-name" type="text" required></label>
-          <label for="room-zone">Zone<input id="room-zone" name="room-zone" type="text" required></label>
+          <label for="room-floor">Floor level
+            <select id="room-floor" name="room-floor" required>
+              <option value="1">Level 1</option>
+              <option value="2">Level 2</option>
+              <option value="3">Level 3</option>
+              <option value="4">Level 4</option>
+            </select>
+          </label>
+          <label for="room-description">Description<textarea id="room-description" name="room-description" required></textarea></label>
           <label for="room-equipment">Equipment<textarea id="room-equipment" name="room-equipment" required></textarea></label>
         `
       );
@@ -1325,7 +1434,7 @@
 
     const toolbar = buildToolbar(tableWrap, {
       search: "Search rooms",
-      status: ["available", "pending", "conflict", "closed"],
+      status: ["available", "closed"],
       sort: [
         ["name-asc", "Name A-Z"],
         ["name-desc", "Name Z-A"],
@@ -1342,7 +1451,8 @@
             .map(
               (room) => `
                 <tr>
-                  <td>${escapeHTML(room.code)}</td>
+                  <td><strong>${escapeHTML(room.name)}</strong><br><span class="helper-text">${escapeHTML(room.code)}</span></td>
+                  <td>Level ${escapeHTML(room.floor)}</td>
                   <td>${escapeHTML(room.type)}</td>
                   <td>${escapeHTML(room.capacity)}</td>
                   <td>${statusBadge(room.status)}</td>
@@ -1354,7 +1464,7 @@
               `
             )
             .join("")
-        : `<tr><td colspan="5">${emptyState("No rooms match your filters.")}</td></tr>`;
+        : `<tr><td colspan="6">${emptyState("No rooms match your filters.")}</td></tr>`;
     };
 
     tbody.addEventListener("click", (event) => {
@@ -1366,10 +1476,11 @@
         editingId = room.id;
         form.elements["room-name"].value = room.name;
         form.elements["room-code"].value = room.code;
-        form.elements["room-zone"].value = room.zone;
+        form.elements["room-floor"].value = room.floor;
         form.elements["room-type"].value = room.type;
         form.elements["room-capacity"].value = room.capacity;
         form.elements["room-status"].value = titleCase(room.status);
+        form.elements["room-description"].value = room.description;
         form.elements["room-equipment"].value = room.equipment;
         notify("Room loaded for editing.");
       }
@@ -1385,16 +1496,20 @@
       const room = {
         name: form.elements["room-name"].value.trim(),
         code: form.elements["room-code"].value.trim().toUpperCase(),
-        zone: form.elements["room-zone"].value.trim(),
+        floor: Number(form.elements["room-floor"].value),
+        zone: `Level ${form.elements["room-floor"].value}`,
         type: form.elements["room-type"].value.trim(),
         capacity: Number(form.elements["room-capacity"].value),
-        status: form.elements["room-status"].value.toLowerCase(),
+        status: form.elements["room-status"].value.toLowerCase().replaceAll(" ", "-"),
+        description: form.elements["room-description"].value.trim(),
         equipment: form.elements["room-equipment"].value.trim(),
       };
       const errors = [];
       if (!room.name) errors.push({ field: "room-name", message: "Room name is required." });
       if (!room.code) errors.push({ field: "room-code", message: "Room code is required." });
+      if (![1, 2, 3, 4].includes(room.floor)) errors.push({ field: "room-floor", message: "Choose a valid PTTA floor." });
       if (!room.type) errors.push({ field: "room-type", message: "Room type is required." });
+      if (!room.description) errors.push({ field: "room-description", message: "Room description is required." });
       if (!Number.isInteger(room.capacity) || room.capacity < 1) errors.push({ field: "room-capacity", message: "Capacity must be at least 1." });
       const duplicate = store.all("rooms").find((item) => item.code === room.code && item.id !== editingId);
       if (duplicate) errors.push({ field: "room-code", message: "A room with this code already exists." });
@@ -1742,6 +1857,7 @@
   };
 
   document.addEventListener("DOMContentLoaded", () => {
+    initFloorPlanTabs();
     renderAvailabilityPage();
     renderRoomDetailsPage();
     initConfirmationPage();
