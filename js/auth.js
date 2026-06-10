@@ -101,6 +101,13 @@
     return `<a class="nav-link${active}" href="${href}">${label}</a>`;
   };
 
+  const themeToggle = `
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode">
+      <span class="theme-icon theme-icon-moon" aria-hidden="true">&#9790;</span>
+      <span class="theme-icon theme-icon-sun" aria-hidden="true">&#9728;</span>
+    </button>
+  `;
+
   const publicNavigation = () => ({
     links:
       currentPage === "index.html"
@@ -115,6 +122,7 @@
           <a class="nav-link" href="index.html#features">Features</a>
         `,
     actions: `
+      ${themeToggle}
       <a class="button small ghost" href="login.html">Login</a>
       <a class="button small" href="register.html">Register</a>
     `,
@@ -128,6 +136,7 @@
       ${navLink("help.html", "Help")}
     `,
     actions: `
+      ${themeToggle}
       <button class="button small warning" type="button" data-auth-logout>Logout</button>
     `,
   });
@@ -141,6 +150,7 @@
       ${navLink("admin-reports.html", "Reports")}
     `,
     actions: `
+      ${themeToggle}
       <button class="button small warning" type="button" data-auth-logout>Logout</button>
     `,
   });
@@ -164,6 +174,7 @@
 
     links.innerHTML = navigationContent.links;
     actions.innerHTML = navigationContent.actions;
+    window.PTTATheme?.sync();
   };
 
   const initializeHomeScrollSpy = () => {
